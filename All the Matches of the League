@@ -1,0 +1,24 @@
+https://leetcode.com/problems/all-the-matches-of-the-league/
+
+
+# Write your MySQL query statement below
+/**
+
+One table : Teams -:- team_name is the primary key
+This table shows the name of a team
+
+PROBLEM: reports all the possible matches of the league
+Create two columns home_team/away_team in the final table.
+
+STEPS: 
+    1. SELF JOIN with team_name not equal to both of the table
+
+
+*/
+
+SELECT
+    T1.team_name AS home_team,
+    T2.team_name AS away_team
+FROM Teams T1
+JOIN Teams T2
+on T1.team_name <> T2.team_name
