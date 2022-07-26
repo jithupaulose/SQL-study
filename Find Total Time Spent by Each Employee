@@ -1,0 +1,21 @@
+https://leetcode.com/problems/find-total-time-spent-by-each-employee/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE : Employees
+(emp_id, event_day, in_time) is the primary key
+Employees table shows the employees' entries and exits in an office
+
+PROBLEM: calculate the total time in minutes spent by each employee on each day at the office.
+total time in minutes spent = out_time - in_time
+
+STEPS:
+    1. group by day, emp_id
+    
+*/
+SELECT
+     event_day AS day,
+     emp_id,
+     SUM(out_time - in_time)AS total_time
+FROM Employees
+GROUP BY day, emp_id
