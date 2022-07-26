@@ -1,0 +1,25 @@
+https://leetcode.com/problems/daily-leads-and-partners/
+
+# Write your MySQL query statement below
+
+/**
+
+One Table: DailySales
+This table doesnot have primary key
+DailySales table contains the date and the name of the product sold and the IDs of the lead and partner it was sold to.
+
+PROBLEM: SQL query that will, for each date_id and make_name, return the number of distinct lead_id's and distinct partner_id's
+
+STEPS:
+    1. GROUP BY date_id, make_name
+    2.  using COUNT(DISTINCT)
+    
+*/
+
+SELECT
+    date_id,
+    make_name,
+    COUNT(DISTINCT lead_id) AS unique_leads,
+    COUNT(DISTINCT partner_id) AS unique_partners
+FROM DailySales
+GROUP BY date_id,make_name
