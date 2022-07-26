@@ -1,0 +1,26 @@
+https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/
+
+ # Write your MySQL query statement below
+/**
+
+Two tables : Employees/EmployeeUNI
+id is the primary key of Employees table
+(id, unique_id) is the primary key of EmployeeUNI table
+
+Employees table contains the id and the name of an employee in a company.
+EmployeeUNI table contains the id and the corresponding unique id of an employee in the company
+
+PROBLEM: show the unique ID of each user, If a user does not have a unique ID replace just show null.
+
+STEPS:
+    1. LEFT JOIN to Employees
+    2. IFNULL(,null)
+    
+*/
+
+SELECT 
+    IFNULL(unique_id,null) as unique_id,
+    name
+FROM Employees Emp
+LEFT JOIN EmployeeUNI EmpU
+ON Emp.id = EmpU.id
