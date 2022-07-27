@@ -1,0 +1,35 @@
+https://leetcode.com/problems/warehouse-manager/
+
+# Write your MySQL query statement below
+/**
+Two Table: Warehouse/Products
+(name, product_id) is the primary key for Warehouse table.
+product_id is the primary key for Products table.
+
+Warehouse table contains the information of the products in each warehouse.
+Products table contains information about the product dimensions (Width, Lenght, and Height)
+
+JOIN condition: Warehouse.product_id = Products.product_id
+
+PROBLEM: report the number of cubic feet of volume the inventory occupies in each warehouse.
+
+STEPS:
+    1. Build a CTE to find the volume of each item from Product Table
+    2. JOIN with Warehouse and sum(units * eachVolume) to find the total volume
+*/
+
+WITH VolumeCTE AS
+(
+SELECT
+    product_id,
+    product_name,
+    (Width * Length * Height) AS Each_Volume
+FROM Products
+)
+SELECT 
+    name AS warehouse_name,
+    SUM(units * Each_Volume) AS volume
+FROM Warehouse W
+JOIN VolumeCTE P
+ON W.product_id = P.product_id
+group by warehouse_name
