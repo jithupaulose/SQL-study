@@ -1,0 +1,25 @@
+https://leetcode.com/problems/invalid-tweets/
+
+
+# Write your MySQL query statement below
+/**
+ONE TABLE : Tweets
+tweet_id is the primary key.
+Tweets table contains all the tweets in a social media app.
+
+PROBLEM: find the IDs of the invalid tweets.tweet is invalid if the number of characters used in the content of the tweet is strictly greater than 15.
+
+STEPS:
+    1. WHERE CHAR_LENGTH(content) >15
+
+
+Note: Difference blw CHAR_LENGTH() and LENGH()
+
+CHAR_LENGTH()  - measured in characters of a string.
+LENGH() -  measured in bytes of a string.
+*/
+
+SELECT 
+    tweet_id
+FROM Tweets
+WHERE CHAR_LENGTH(content) > 15 
