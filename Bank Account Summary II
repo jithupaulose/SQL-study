@@ -1,0 +1,56 @@
+https://leetcode.com/problems/bank-account-summary-ii/
+
+# Write your MySQL query statement below
+/**
+Two table : Users/Transactions
+account is the primary key for Users table
+trans_id is the primary key for Transactions table.
+
+Users table contains the account number of each user in the bank.
+Transactions table contains all changes made to all accounts.
+
+Joining Condition: Users.account = Transactions.account
+
+PROBLEM: Report the name and balance of users with a balance higher than 10000.
+The balance of an account is equal to the sum of the amounts of all transactions involving that account.
+
+SOLUTION 1:::
+STEPS:
+    1. Using CTE, SUM() window function and join condition
+    2. SUM(amount) OVER(partition by account)
+    2. Call it with Group by the account and apply the condition
+
+    
+WITH TotalCTE AS
+(
+SELECT
+      U.account,
+      U.name,
+      SUM(amount) OVER(partition by U.account ) AS balance
+FROM Transactions T
+JOIN Users U
+ON T.account = U.account
+
+)
+select 
+    name,
+    balance
+from TotalCTE
+where balance > 10000
+group by account
+    
+SOLUTION 2:::
+
+STEP:
+    1. HAVING, GROUP BY, SUM
+    
+*/
+SELECT 
+    name,
+    SUM(amount) AS balance
+FROM Transactions  T
+JOIN Users U
+ON T.account = U.account
+GROUP BY U.account
+HAVING balance > 10000
+    
