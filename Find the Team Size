@@ -1,0 +1,22 @@
+https://leetcode.com/problems/find-the-team-size/
+
+# Write your MySQL query statement below
+
+/**
+
+ONE table: Employee
+employee_id is the primary key
+
+Employee table contains the ID of each employee and their respective team.
+
+PROBLEM: find the team size of each of the employees.
+
+STEPS:
+    1. COUNT(team_id) OVER(PARTITION BY team_id)
+    
+*/
+
+SELECT 
+    employee_id,
+    COUNT(team_id) OVER(PARTITION BY team_id) AS team_size
+FROM Employee
