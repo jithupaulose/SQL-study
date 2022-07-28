@@ -1,0 +1,34 @@
+https://leetcode.com/problems/npv-queries/
+
+
+# Write your MySQL query statement below
+
+/**
+
+Two tables: NPV/Queries
+(id, year) is the primary key of NPV table.
+(id, year) is the primary key of Queries table.
+
+NPV table has information about the id and the year of each inventory and the corresponding net present value.
+
+Queries table has information about the id and the year of each inventory query.
+
+PROBLEM: find the npv of each query of the Queries table.
+
+STEPS:
+    RIGHT JOIN queries table to NPV table
+    JOIN with NPV.id = Queries.id and NPV.year = Queries.year
+    Either use colasese or ifnull
+    IFNULL(N.npv,0) AS npv or coalesce(npv,0) as npv
+
+
+
+*/
+
+SELECT
+    Q.id,
+    Q.year,
+    IFNULL(N.npv,0) AS npv
+FROM NPV N
+RIGHT JOIN Queries Q
+ON N.id = Q.id and N.year = Q.year
