@@ -1,0 +1,34 @@
+https://leetcode.com/problems/all-valid-triplets-that-can-represent-a-country/
+
+
+# Write your MySQL query statement below
+/**
+
+THREE TABLE: SchoolA/SchoolB/SchoolC
+student_id is the primary key for all tables.
+Each tables contains the name and the id of a student in each schools.
+
+PROBLEM: find all the possible triplets representing the country under the given constraints
+        member_A is selected from SchoolA,
+        member_B is selected from SchoolB,
+        member_C is selected from SchoolC, and
+        The selected students' names and IDs are pairwise distinct (i.e. no two students share the same name, and no two students share the same ID).
+        
+STEPS:
+    1. To solve this, we are using cross join. Join everything and make the filter where no id not equals and names not equals
+    
+*/
+
+SELECT 
+    A.student_name AS member_A,
+    B.student_name AS member_B,
+    C.student_name AS member_C
+FROM SchoolA A, SchoolB B, SchoolC C
+WHERE 
+A.student_name <> B.student_name
+    AND B.student_name <> C.student_name
+        AND A.student_name <> C.student_name
+AND
+A.student_id <> B.student_id
+    AND B.student_id <> C.student_id
+        AND A.student_id <> C.student_id
