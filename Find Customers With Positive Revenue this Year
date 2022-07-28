@@ -1,0 +1,33 @@
+https://leetcode.com/problems/find-customers-with-positive-revenue-this-year/
+
+# Write your MySQL query statement below
+/**
+One table: Customers
+
+(customer_id, year) is the primary key for Customers table.
+Customers table contains the customer ID and the revenue of customers in different years
+
+PROBLLEM: report the customers with postive revenue in the year 2021.
+
+STEP:
+
+TWO Ways to solve this problem.
+
+1. Since the (customer_id, year) is the primary key. for one year there is only one  unique customer_id. So no need group by and having
+
+SELECT 
+    customer_id
+FROM 
+WHERE year =  '2021' AND revenue > 0 ;
+
+2. Using GROUP BY and HAVING
+    
+*/
+
+SELECT
+    customer_id
+FROM Customers
+WHERE year = '2021'
+GROUP BY 1
+HAVING SUM(revenue) > 0 ;
+
