@@ -1,0 +1,28 @@
+https://leetcode.com/problems/unique-orders-and-customers-per-month/
+
+# Write your MySQL query statement below
+/**
+ONE Table: Orders
+order_id is the primary key for Orders table.
+Orders table contains information about the orders made by customer_id.
+
+PROBLEM:
+find the number of unique orders and the number of unique customers with invoices > $20 for each different month.
+
+STEPS:
+    GROUP BY month
+    date_format(order_date, '%Y-%m')/ 
+                                substring(order_date,1,7)/ 
+                                left(order_date, 7)
+    count( distinct customer_id)
+    count( distinct order_id)
+    where invoice > 30
+*/
+
+SELECT 
+    date_format(order_date,'%Y-%m') AS month,
+    COUNT(order_id) AS order_count,
+    COUNT( DISTINCT customer_id) AS customer_count
+FROM Orders
+WHERE invoice > 20 
+GROUP BY 1
