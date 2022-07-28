@@ -1,0 +1,30 @@
+https://leetcode.com/problems/products-price-for-each-store/
+
+# Write your MySQL query statement below
+/**
+
+ONE Table: Products
+(product_id, store) is the primary key for Products table.
+store is an ENUM of type ('store1', 'store2', 'store3') 
+price is the price of the product at this store.
+
+PROBLEM: find the price of each product in each store.
+
+STEPS:
+    1. Using SUM(IF()) and GROUP BY
+    
+OR 
+
+    sum(case when store = 'store1' then price else null end) as store1,
+    sum(case when store = 'store2' then price else null end) as store2,
+    sum(case when store = 'store3' then price else null end) as store3
+    
+*/
+
+SELECT
+    product_id,
+    SUM(IF(store = 'store1',price, null )) as store1,
+    SUM(IF(store = 'store2',price, null )) as store2,
+    SUM(IF(store = 'store3',price, null )) as store3
+FROM Products
+GROUP BY product_id
