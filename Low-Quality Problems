@@ -1,0 +1,16 @@
+https://leetcode.com/problems/low-quality-problems/
+
+# Write your MySQL query statement below
+/**
+
+PROBLEM:  report the IDs of the low-quality problems.
+percentage of the problem  = [number of likes divided by the total number of votes) is strictly less than 60%.
+
+HERE problem_id is a primary key. so no need to go with GROUP BY and HAVING
+*/
+
+SELECT 
+    problem_id
+FROM Problems
+WHERE ((likes *100)/(likes + dislikes)) <60 
+ORDER BY 1;
