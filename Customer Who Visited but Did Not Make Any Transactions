@@ -1,0 +1,43 @@
+https://leetcode.com/problems/customer-who-visited-but-did-not-make-any-transactions/
+
+# Write your MySQL query statement below
+/**
+Two tables: Visits/Transactions
+
+visit_id is the primary key for Visits table
+transaction_id is the primary key for Transactions table
+
+visit_id table contains information about the customers who visited the mall.
+Transactions table contains information about the transactions made during the visit_id
+
+Joining Condition: Visits.visit_id = Transactions.visit_id
+
+PROBLEM: find the IDs of the users who visited without making any transactions and the number of times they made these types of visits.
+
+STEPS:
+    1. LEFT JOIN using
+    2. distinct customer_id, count(visit_id)
+    3. where condition visitor_id null for transaction table
+*/
+
+SELECT distinct
+       customer_id,
+    COUNT(V.visit_id) AS count_no_trans
+FROM Visits V
+LEFT JOIN Transactions T
+ON V.visit_id = T.visit_id
+WHERE T.visit_id IS NULL
+group by 1
+
+
+/**
+By using WINDOW function, we can solve this problem
+
+select  distinct
+    customer_id, 
+    count(v.visit_id) over(partition by v.customer_id ) as count_no_trans 
+from Visits v
+left join Transactions t 
+on v.visit_id = t.visit_id 
+where t.visit_id is null
+*/
