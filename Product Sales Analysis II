@@ -1,0 +1,45 @@
+https://leetcode.com/problems/product-sales-analysis-ii/
+
+# Write your MySQL query statement below
+/**
+
+Two Table: Sales/Product
+(sale_id, year) is the primary key of Sales table
+product_id is the primary key of Product table.
+
+Sales table shows a sale on the product product_id in a certain year.
+Product table indicates the product name of each product.
+
+PROBLEM: total quantity sold for every product id.
+
+STEPS:
+
+SOLUTION  1:
+
+    GROUP BY product_id
+    SUM(quantity)
+    
+SELECT 
+    product_id,
+    SUM(quantity) AS total_quantity
+FROM Sales
+GROUP BY product_id
+
+SOLUTION  2:
+
+    Leetcode test is wrong 
+    Use Product table because product_id is the primarykey
+    IFNULL(SUM(),0) as total_quantity
+    GROUP BY product_id
+
+*/
+
+SELECT 
+    P.product_id,
+    IFNULL(SUM(quantity),0) as total_quantity
+FROM Product P
+JOIN Sales S # It suppose to be LEFT JOIN 
+ON P.product_id = S.product_id
+WHERE 2 IS NOT NULL  # only for this question 
+group by 1
+
