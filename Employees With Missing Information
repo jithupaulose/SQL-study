@@ -1,0 +1,37 @@
+https://leetcode.com/problems/employees-with-missing-information/
+
+# Write your MySQL query statement below
+
+/**
+
+Two tables: Employees/Salaries
+employee_id is the primary key for Employees table.
+employee_id is the primary key for Salaries table.
+
+Employees table indicates the name of the employee whose ID is employee_id.
+Salaries table indicates the salary of the employee whose ID is employee_id.
+
+PROBLEM: report the IDs of all the employees with missing information. 
+    The employee's name is missing, or
+    The employee's salary is missing.
+    
+    
+STEPS:
+    WITH CTE with NOT IN and UNION
+    ORDER BY employee_id
+*/
+
+WITH CTE AS
+(
+SELECT 
+    employee_id
+FROM Employees WHERE employee_id NOT IN ( SELECT employee_id FROM Salaries)
+
+UNION 
+
+SELECT employee_id
+FROM Salaries WHERE employee_id NOT IN ( SELECT employee_id FROM Employees)
+)
+SELECT * 
+FROM CTE 
+ORDER BY employee_id
