@@ -1,0 +1,41 @@
+https://leetcode.com/problems/average-selling-price/
+
+# Write your MySQL query statement below
+
+/**
+
+Two Table: Prices/UnitsSold
+(product_id, start_date, end_date) is the primary key for Prices table.
+There is no primary key for UnitsSold table, it may contain duplicates.
+
+Prices table indicates the price of the product_id in the period from start_date to end_date.
+UnitsSold table indicates the date, units, and product_id of each product sold. 
+
+PROBLEM: find the average selling price for each product. average_price should be rounded to 2 decimal places.
+
+
+STEPS: 
+    ROUND(,2) 
+    GROUP BY product_id
+    ON Prices.product_id = UnitsSold.product_id AND purchase_date BETWEEN start_date AND end_date
+    average selling price = SUM(price*units)/SUM(units)
+    Used CTE for making clean code.
+    
+*/
+WITH CTE AS
+(
+SELECT 
+    U.product_id,
+    ROUND(SUM(price*units)/SUM(units),2) AS average_price
+FROM UnitsSold U
+JOIN Prices P
+ON 
+    U.product_id = P.product_id 
+        AND
+          (purchase_date BETWEEN start_date AND end_date)
+GROUP BY 1
+)
+SELECT
+    product_id,
+    average_price
+FROM CTE 
