@@ -1,0 +1,21 @@
+https://leetcode.com/problems/swap-salary/
+
+# Write your MySQL query statement below
+
+/**
+
+one table : Salary
+id is the primary key for Salary table.
+sex column is ENUM value of type ('m', 'f').
+Salary table contains information about an employee.
+
+PROBLEM: swap all 'f' and 'm' values (i.e., change all 'f' values to 'm' and vice versa) with a single update statement and no intermediate temporary tables.
+
+STEP:
+    1. UPDATE 
+    2. UPDATE  table_name SET sex = (CASE WHEN ) 
+    
+*/
+
+UPDATE  Salary
+SET sex =  CASE WHEN sex = 'm' THEN 'f' ELSE 'm' END 
