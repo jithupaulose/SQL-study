@@ -1,0 +1,23 @@
+https://leetcode.com/problems/shortest-distance-in-a-line/
+
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Point
+x is the primary key column for Point table.
+Point table indicates the position of a point on the X-axis
+
+PROBLEM:  report the shortest distance between any two points from the Point table
+
+STEPS:
+    MIN(ABS())
+    SELF JOIN on x!=x
+
+*/
+
+
+SELECT 
+    MIN(ABS(P1.x - P2.x)) AS shortest
+FROM Point P1
+JOIN Point P2 
+ON P1.x != P2.x
