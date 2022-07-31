@@ -1,0 +1,30 @@
+https://leetcode.com/problems/product-sales-analysis-i/
+
+# Write your MySQL query statement below
+
+/**
+
+Two Table: Sales/Product
+(sale_id, year) is the primary key of Sales table.
+product_id is the primary key of Product table.
+
+Sales table shows a sale on the product product_id in a certain year.
+Product table indicates the product name of each product.
+
+
+PROBLEM:
+    Reports the product_name, year, and price for each sale_id in the Sales table.
+    
+STEPS:
+    LEFT JOIN to Sales Table
+    JOIN ON Sales.product_id = Product.product_id
+    
+*/
+
+SELECT
+    product_name,
+    year,
+    price
+FROM Sales S
+LEFT JOIN Product P
+ON S.product_id = P.product_id
