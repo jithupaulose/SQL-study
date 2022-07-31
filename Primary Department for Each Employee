@@ -1,0 +1,48 @@
+https://leetcode.com/problems/primary-department-for-each-employee/
+
+
+# Write your MySQL query statement below
+
+/**
+ONE TABLE: Employee
+(employee_id, department_id) is the primary key for Employee table.
+employee_id is the id of the employee.
+department_id is the id of the department to which the employee belongs.
+primary_flag is an ENUM of type ('Y', 'N'). If the flag is 'Y', the department is the primary department for the employee. If the flag is 'N', the department is not the primary.
+
+PROBLEM: report all the employees with their primary department
+
+STEPS:
+
+SOLUTION 1:
+    COALESCE(MAX(), MAX())
+    GROUP BY 
+
+
+SELECT
+    employee_id,
+    COALESCE(max(CASE WHEN primary_flag = 'Y' THEN department_id ELSE null end), MAX(department_id)) as department_id
+FROM Employee
+GROUP BY employee_id
+
+SOLUTION 2:
+
+
+*/
+WITH CTE AS
+(
+SELECT
+    employee_id,
+    department_id,
+    DENSE_RANK() OVER(PARTITION BY employee_id ORDER BY primary_flag ) AS rnk
+FROM Employee
+)
+
+SELECT 
+    employee_id,
+    department_id
+FROM CTE
+WHERE rnk = 1
+
+
+
