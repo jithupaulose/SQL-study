@@ -1,0 +1,42 @@
+https://leetcode.com/problems/game-play-analysis-i/
+
+# Write your MySQL query statement below
+
+/**
+ONE Table Activity
+(player_id, event_date) is the primary key 
+Activity table shows the activity of players of some games.
+
+PROBLEM: report the first login date for each player
+
+STEPS:
+Solution 1 :
+    with CTE and help of dense_rank()
+    dense_rank() over(partition by player_id order by event_date asc)
+    
+WITH ActivityFirstLogin AS
+(
+SELECT distinct
+    player_id,
+    device_id,
+    event_date,
+    DENSE_RANK() OVER(PARTITION BY player_id ORDER BY event_date) as Rnk
+FROM Activity
+)
+SELECT 
+    player_id,
+    event_date AS first_login
+FROM ActivityFirstLogin
+WHERE Rnk =1
+    
+Solution 2:
+    MIN(event_date) with GROUP BY player_id
+
+*/
+
+
+SELECT 
+    player_id,
+    MIN(event_date) AS first_login
+FROM Activity
+GROUP BY player_id
