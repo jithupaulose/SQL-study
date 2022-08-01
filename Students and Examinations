@@ -1,0 +1,41 @@
+https://leetcode.com/problems/students-and-examinations/
+
+# Write your MySQL query statement below
+/**
+Three Tables: Students/Subjects/Examinations
+
+student_id is the primary key for Students table.
+subject_name is the primary key for Subjects table.
+no primary key for Examinations table
+
+Students table contains the ID and the name of one student in the school.
+Subjects table contains the name of one subject in the school.
+Examinations table indicates that a student with ID student_id attended the exam of subject_name.
+
+JOIN condition: 
+    Students.student_id = Examinations.student_id
+    Examinations.subject_name = Subjects.subject_name
+    
+PROBLEM:
+    find the number of times each student attended each exam.
+    
+    
+STEPS:
+    number of times each student attended MEANS count(subject_name from Examinations Table)
+    FIRST CROSS JOIN Students and  Subjects table
+    then LEFT JOIN Examinations
+    GROUP BY student_id,subject_name
+    
+    
+*/
+SELECT
+    S.student_id,
+    S.student_name,
+    Sub.subject_name,
+    COUNT(E.subject_name) as attended_exams
+FROM Students S
+JOIN Subjects Sub #CROSS JOIN 
+LEFT JOIN Examinations E
+ON S.student_id = E.student_id AND E.subject_name = Sub.subject_name
+GROUP BY 1, 3
+ORDER BY 1, 3
