@@ -1,0 +1,32 @@
+https://leetcode.com/problems/employee-bonus/
+
+# Write your MySQL query statement below
+/**
+Two Tables: Employee/Bonus
+empId is the primary key column for Employee table.
+empId is the primary key column for Bonus table.
+
+Employee Table indicates the name and the ID of an employee in addition to their salary and the id of their manager.
+Bonus table contains the id of an employee and their respective bonus.
+
+JOIN Condition: Employee.empId = Bonus.empId
+
+PROBLEM:
+    report the name and bonus amount of each employee with a bonus less than 1000.
+    
+STEPS:
+    LEFT JOIN to Employee Table
+    IFNULL()
+    WHERE bonus < 1000
+    
+*/
+
+SELECT
+    name,
+    ifnull(bonus,null) as bonus
+FROM Employee E
+LEFT JOIN Bonus B
+ON E.empId = B.empId
+WHERE bonus < 1000 or bonus is null
+
+    
