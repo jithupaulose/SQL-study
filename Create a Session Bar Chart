@@ -1,0 +1,43 @@
+https://leetcode.com/problems/create-a-session-bar-chart/
+
+# Write your MySQL query statement below
+/**
+One table: Sessions
+session_id is the primary key for Sessions table.
+Duration is the time in seconds that a user has visited the application.
+
+PROBLEM:  create bins of "[0-5>", "[5-10>", "[10-15>", and "15 minutes or more" and count the number of sessions on it. Report the (bin, total)
+
+STEPS:
+    Two CTE. One for the name classification. Second one for the duration spilt classification
+    GROUP BY Name.bin and take the count(Group.bin) for total
+    
+*/
+
+WITH session_group AS
+(
+SELECT session_id, 
+            (CASE WHEN duration < 300 THEN '[0-5>' 
+            WHEN duration >= 300 AND duration < 600 THEN '[5-10>'
+            WHEN duration >= 600 AND duration < 900 THEN '[10-15>'
+            WHEN duration >= 900 THEN '15 or more' ELSE 0 END) as bin
+
+FROM Sessions 
+),
+Bin_name AS
+(
+        SELECT '[0-5>' AS bin
+            UNION
+        SELECT '[5-10>' AS bin
+            UNION
+        SELECT '[10-15>' AS bin
+            UNION
+        SELECT '15 or more' AS bin    
+)
+SELECT 
+    N.bin,
+    COUNT(S.bin) AS total
+FROM Bin_name N
+LEFT JOIN  session_group S
+    ON N.bin = S.bin
+GROUP BY N.bin
