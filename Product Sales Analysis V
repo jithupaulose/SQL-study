@@ -1,0 +1,29 @@
+https://leetcode.com/problems/product-sales-analysis-v/
+
+# Write your MySQL query statement below
+
+/**
+ 
+Two tables : Sales/Product
+sale_id is the primary key of Sales table
+product_id is the primary key of Product table.
+JOIN condition: product_id (blw two tables)
+
+Sales table shows the ID of the product and the quantity purchased by a user.
+Product table indicates the price of each product.
+
+PROBLEM: reports the spending of each user.
+CONDITION: order by spending desc, user_id asc
+
+STEPS: GROUP BY with SELF JOIN
+
+*/
+
+SELECT 
+    user_id,
+    SUM(quantity*price) AS spending
+FROM Sales S
+ JOIN Product P
+ON S.product_id = P.product_id
+group by user_id
+order by spending desc, user_id asc
