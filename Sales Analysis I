@@ -1,0 +1,38 @@
+https://leetcode.com/problems/sales-analysis-i/
+
+# Write your MySQL query statement below
+
+/**
+Two Table: Product/Sales
+
+product_id is the primary key of Product table.
+Sales table has no primary key.
+
+Product table indicates the name and the price of each product.
+Sales table contains some information about one sale.
+
+JOIN condition: Product.product_id = Sales.product_id
+
+PROBLEM: reports the best seller by total sales price, If there is a tie, report them all.
+    FIND the best seller : total sales price. If there is a tie, report them all.
+    
+STEPS:
+    DENSE_RANK() OVER( order by SUM(unit_price*quantity) DESC)
+    GROUP BY seller_id
+    
+*/
+
+WITH CTE AS
+(
+        SELECT
+            seller_id,
+            DENSE_RANK() OVER(ORDER BY SUM(unit_price*quantity) DESC) as rnk
+        FROM Sales S
+        JOIN Product P
+        ON S.product_id = P.product_id
+        GROUP BY 1
+)
+SELECT seller_id
+FROM CTE
+where rnk = 1
+
