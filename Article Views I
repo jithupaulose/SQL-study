@@ -1,0 +1,21 @@
+https://leetcode.com/problems/article-views-i/
+
+# Write your MySQL query statement below
+/**
+One Table: Views
+There is no primary key
+Each row of Views table indicates that some viewer viewed an article (written by some author) on some date. 
+
+PROBLEM:
+    Find all the authors that viewed at least one of their own articles.
+
+STEPS:
+    WHERE condition ORDER BY and DISTINCT id
+    
+*/
+SELECT 
+    DISTINCT author_id as id
+FROM Views
+WHERE author_id = viewer_id
+ORDER BY 1        
+        
