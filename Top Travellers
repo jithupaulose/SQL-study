@@ -1,0 +1,33 @@
+https://leetcode.com/problems/top-travellers/
+
+# Write your MySQL query statement below
+/**
+Two tables: Users/Rides
+id is the primary key for Users table
+id is the primary key for Rides table.
+
+name is the name of the user table.
+user_id is the id of the user who traveled the distance "distance".
+
+JOIN condition: Users.id = Rides.user_id
+
+PROBLEM: report the distance traveled by each user.
+
+STEPS:
+
+    LEFT JOIN to users tables
+    IFNULL(SUM(distaince),0) / COALESCE(SUM(distaince),O)
+    ORDER BY travelled_distance DESC, name ASC
+    GROUP BY id
+    
+*/
+
+SELECT
+    name, 
+    ifnull(SUM(distance),0) AS travelled_distance
+FROM Users U
+LEFT JOIN Rides R
+ON  U.id = R.user_id
+GROUP BY U.id
+ORDER BY 2 DESC, 1
+
