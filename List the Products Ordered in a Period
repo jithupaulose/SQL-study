@@ -1,0 +1,40 @@
+https://leetcode.com/problems/list-the-products-ordered-in-a-period/
+
+# Write your MySQL query statement below
+
+/**
+
+Two Table: Products/Orders
+product_id is the primary key for Products table.
+There is no primary key for Orders table.
+
+Products table contains data about the company's products.
+
+JOIN Condition: Products.product_id = Orders.product_id
+
+PROBLEM: get the names of products that have at least 100 units ordered in February 2020 and their amount.
+
+STEPS:
+    Generic CTE for sort for month and get the sum of units for each products for each month
+    order_date like '2020-02%'
+     where sum(units) for each month <=100
+
+*/
+
+WITH CTE AS
+(
+    SELECT 
+        P.product_name,
+        date_format(O.order_date,'%Y-%m') AS month,
+        SUM(O.unit) as Unit
+    FROM Products P
+    JOIN Orders O 
+        ON P.product_id = O.product_id
+    GROUP BY 2,1
+)
+    
+SELECT
+    product_name,
+    Unit
+FROM CTE
+WHERE unit>=100  and month = '2020-02'
