@@ -1,0 +1,21 @@
+https://leetcode.com/problems/find-customer-referee/
+
+# Write your MySQL query statement below
+
+/**
+One Table: Customer
+id is the primary key column for Customer table.
+Each row of Customer table indicates the id of a customer, their name, and the id of the customer who referred them.
+
+PROBLEM: report the names of the customer that are not referred by the customer with id = 2
+
+STEPS: 
+    SOLVE using WHERE condition
+
+*/
+
+
+
+SELECT name
+FROM Customer
+WHERE referee_id <> 2 OR referee_id IS NULL;
