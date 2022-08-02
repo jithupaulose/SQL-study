@@ -1,0 +1,28 @@
+https://leetcode.com/problems/queries-quality-and-percentage/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Queries
+There is no primary key for Queries table.
+
+PROBLEM: find each query_name, the quality and poor_query_percentage.
+
+quality :   ratio between query rating and its position
+            poor query percentage :  percentage of all queries with rating less than 3.
+            rounded to 2 decimal places
+
+STEPS:
+    ROUND(,2)
+    GROUP BY query_name
+    SUM(rating/position)/COUNT(*) for quality
+    SUM(CASE WHEN rating < 3 THEN 1 ELSE 0 END) * 100/COUNT(*) for poor_query_percentage
+    
+            
+*/
+
+SELECT 
+    query_name,
+    ROUND(SUM(rating/position)/COUNT(*), 2) AS quality,
+    ROUND(SUM(CASE WHEN rating < 3 THEN 1 ELSE 0 END) * 100/COUNT(*) , 2) AS poor_query_percentage
+FROM Queries
+GROUP BY query_name
