@@ -1,0 +1,23 @@
+https://leetcode.com/problems/the-winner-university/
+
+# Write your MySQL query statement below
+
+WITH NY_CTE AS
+(
+    SELECT 
+        COUNT(*) AS NYcnt
+    FROM NewYork
+        WHERE score >= 90
+),
+CAL_CTE AS
+(
+    SELECT 
+        COUNT(*) AS CALcnt
+    FROM California
+        WHERE score >= 90
+)
+SELECT 
+    CASE WHEN  NYcnt > CALcnt THEN 'New York University'
+        WHEN  NYcnt < CALcnt THEN 'California University' 
+        ELSE 'No Winner' END AS winner
+FROM NY_CTE,CAL_CTE
