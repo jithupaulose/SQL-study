@@ -1,0 +1,33 @@
+https://leetcode.com/problems/sales-person/
+
+
+# Write your MySQL query statement below
+/**
+THREE Tables : SalesPerson/Company/Orders
+
+sales_id is the primary key column for SalesPerson table.
+com_id is the primary key column for Company table.
+order_id is the primary key column for Orders table.
+
+SalesPerson table indicates the name and the ID of a salesperson alongside their salary, commission rate, and hire date.
+Company table indicates the name and the ID of a company and the city in which the company is located.
+Orders table contains information about one order. 
+
+PROBLEM: report the names of all the salespersons who did not have any orders related to the company with the name "RED".
+
+STEPS: 
+    BEST Way to solve this by left join all the tables to the main tables
+    group by the primary key of the main table
+    having sum( case condition where the RED then 1 else 0) is equal to 0;
+    
+*/
+
+SELECT 
+   S.name
+FROM SalesPerson S
+LEFT JOIN Orders O
+        ON S.sales_id = O.sales_id
+LEFT JOIN Company C
+        ON O.com_id = C.com_id
+GROUP BY S.sales_id
+HAVING SUM(CASE WHEN C.name = 'RED' THEN 1 ELSE 0 END ) = 0
