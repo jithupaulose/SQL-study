@@ -1,0 +1,21 @@
+https://leetcode.com/problems/combine-two-tables/
+
+# Write your MySQL query statement below
+
+
+# COMBINE 2 TABLES
+# JOIN KEY: personId
+# LEFT JOIN TO Person to if the city and state are null
+
+
+
+
+
+SELECT
+    firstName,
+    lastName,
+    city,
+    state
+FROM Person P
+LEFT JOIN Address A
+ON P.personId = A.personId
