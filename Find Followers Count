@@ -1,0 +1,36 @@
+https://leetcode.com/problems/find-followers-count/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Followers
+(user_id, follower_id) is the primary key for Followers table.
+Followers table contains the IDs of a user and a follower in a social media app where the follower follows the user
+
+PROBLEM:  SQL query that will, for each user, return the number of followers
+        ordered by user_id.
+        
+STEPS:
+    USING GROUP BY and COUNT()
+        
+*/
+
+SELECT 
+    user_id,
+    COUNT(follower_id) AS followers_count
+FROM Followers
+GROUP BY user_id
+ORDER BY user_id
+
+
+
+WITH CTE AS
+(
+SELECT 
+        user_id,
+    COUNT(follower_id) OVER(PARTITION BY user_id) AS followers_count
+FROM Followers
+
+)
+SELECT
+* FROM CTE
+GROUP BY user_id
