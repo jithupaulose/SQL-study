@@ -1,0 +1,40 @@
+https://leetcode.com/problems/percentage-of-users-attended-a-contest/
+
+# Write your MySQL query statement below
+/**
+TWO TABLES: Users/Register
+user_id is the primary key for Users table.
+(contest_id, user_id) is the primary key for Register table.
+
+Users table contains the name and the id of a user.
+Register table contains the id of a user and the contest they registered into.
+
+
+PROBLEM: find the percentage of the users registered in each contest rounded to two decimals.
+     order by percentage desc
+     order by contest_id asc
+     
+STEPS:
+    Using CTE, First find the count of user_id from Users table. DONT do distinct, because it is primary key
+    GROUP BY contest_id
+    ROUND()
+    100 * COUNT(user_id) / cnt from the other table
+    
+    
+    
+*/
+
+WITH CTE AS
+(
+SELECT
+    COUNT(user_id) as cnt
+FROM Users
+)
+SELECT 
+    contest_id,
+    ROUND(100 * COUNT(user_id)/cnt, 2) AS percentage
+FROM Register
+JOIN CTE 
+GROUP BY 1
+ORDER BY 2 DESC, 1 ASC
+
