@@ -1,0 +1,21 @@
+https://leetcode.com/problems/not-boring-movies/
+
+# Write your MySQL query statement below
+/**
+One Table: Cinema
+id is the primary key for Cinema table.
+Cinema table contains information about the name of a movie, its genre, and its rating.
+
+PROBLEM: report the movies with an odd-numbered ID and a description that is not "boring".
+        ordered by rating in descending order.
+
+STEPS:
+    where condition : to find the odd use id%2 = 1 ( gives remainder)
+    NOT LIKE ('%boring%')
+*/
+
+SELECT
+    * 
+FROM Cinema
+WHERE description NOT LIKE '%boring%' and id%2 = 1
+order by rating desc
