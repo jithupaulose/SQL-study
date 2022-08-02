@@ -1,0 +1,26 @@
+https://leetcode.com/problems/calculate-special-bonus/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Employees
+employee_id is the primary key for this table.
+Employees table indicates the employee ID, employee name, and salary
+
+PROBLEM: calculate the bonus of each employee
+The bonus of an employee is 100% of their salary if
+    the ID of the employee is an odd number 
+    the employee name does not start with the character 'M'. OTHERWISE 0 AS BONUS
+    ordered by employee_id
+    
+STEPS
+    SELECT employee_id,
+   (CASE WHEN ID%2 = 1 AND name NOT LIKE 'M%' THEN salary ELSE O END) AS BONUS
+    FROM Employees 
+    ordered by employee_id
+    
+*/
+SELECT
+    employee_id,
+    CASE WHEN employee_id % 2 = 1 AND name NOT LIKE 'M%' THEN salary ELSE 0 END AS bonus
+FROM Employees
+ORDER BY 1
