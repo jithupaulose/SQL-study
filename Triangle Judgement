@@ -1,0 +1,27 @@
+https://leetcode.com/problems/triangle-judgement/
+
+# Write your MySQL query statement below
+
+/**
+ONE TABLE:Triangle
+(x, y, z) is the primary key column for Triangle table.
+Triangle table contains the lengths of three line segments.
+
+PROBLEM: report for every three line segments whether they can form a triangle.
+
+STEPS:
+    x + y > z
+    y + z > x
+    x + z > y then it is triangle
+    
+*/
+
+SELECT 
+    x,
+    y,
+    z,
+    (CASE WHEN x + y > z AND 
+                y + z > x AND
+                    x + z > y THEN 'Yes' ELSE 'No' END) AS triangle
+FROM Triangle
+    
