@@ -1,0 +1,23 @@
+https://leetcode.com/problems/duplicate-emails/
+
+# Write your MySQL query statement below
+
+
+/**
+One table Person
+id is the primary key of Person table
+
+PROBLEM : Report all duplicate emails
+
+STEPS
+Using SELECT , GROUP BY , HAVING count(id) >1 
+group by email, having count(id) >1
+
+*/
+
+
+SELECT
+     email
+FROM Person
+GROUP BY email
+HAVING COUNT(email) >1
