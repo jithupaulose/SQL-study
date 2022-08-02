@@ -1,0 +1,21 @@
+https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/
+
+# Write your MySQL query statement below
+/**
+
+ONE TABLE: ActorDirector
+timestamp is the primary key column for ActorDirector table.
+
+PROBLEM: report that provides the pairs (actor_id, director_id) where the actor has cooperated with the director at least three times.
+
+STEPS:
+    Can solve it using GROUP BY and HAVING 
+
+*/
+
+SELECT
+    actor_id,
+    director_id
+FROM ActorDirector
+GROUP BY 1,2
+HAVING COUNT(*) >=3
