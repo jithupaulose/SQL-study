@@ -1,0 +1,34 @@
+https://leetcode.com/problems/consecutive-available-seats/
+
+# Write your MySQL query statement below
+
+/**
+One Table: Cinema
+seat_id is an auto-increment primary key column for Cinema table
+Cinema table indicates whether the ith seat is free or not. 1 means free while 0 means occupied.
+
+PROBLEM:  report all the consecutive available seats in the cinema.
+          ordered by seat_id in asc
+          
+STEPS:
+    WITH CTE lag(), lead() order by seat_id
+    where lagID AND FREE = 1 OR  leadid AND FREE = 1
+
+*/
+
+WITH CTE AS
+(
+SELECT 
+    seat_id,
+    LAG(free) OVER(ORDER BY seat_id) AS LagF,
+    free,
+    LEAD(free) OVER(ORDER BY seat_id) AS LeadF
+FROM Cinema
+
+)
+
+SELECT 
+    seat_id 
+FROM CTE
+WHERE (LagF = 1 AND free = 1) OR (LeadF = 1 AND free = 1)
+ORDER BY 1
