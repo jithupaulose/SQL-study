@@ -1,0 +1,25 @@
+https://leetcode.com/problems/customers-who-never-order/
+
+# Write your MySQL query statement below
+
+/**
+HERE Two Tables Customers/ Orders
+id is the primary key of both tables. So JOIN key is Customers.id = Orders.customerId
+Customer table indicates the ID and name of a customer.
+Orders table indicates the ID of an order and the ID of the customer who ordered it.
+
+PROBLEM:  report all customers who never order anything
+
+STEPS: 
+LEFT JOIN the Customers table with Orders table
+and filter the customerId of Orders table is NULL
+*/
+
+SELECT 
+
+    name AS Customers
+    
+FROM Customers c
+LEFT JOIN Orders o
+ON c.id = o.customerId 
+where o.customerId is null
