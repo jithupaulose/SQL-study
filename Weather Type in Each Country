@@ -1,0 +1,47 @@
+https://leetcode.com/problems/weather-type-in-each-country/
+
+# Write your MySQL query statement below
+
+
+/**
+
+Two Table: Countries/Weather
+
+country_id is the primary key for Countries table.
+(country_id, day) is the primary key for Weather table.
+
+Countries table contains the ID and the name of one country.
+Weather table indicates the weather state in a country for one day.
+
+PROBLEM: find the type of weather in each country for November 2019.
+        Cold if the average weather_state is less than or equal 15,
+        Hot if the average weather_state is greater than or equal to 25, and
+        Warm otherwise.
+
+STEPS:
+    WITH CTE Find the avg, each month using date_format()
+    Group by using countryid , month
+    CASE Statement
+    
+*/
+
+WITH CTE AS
+(
+SELECT  
+    country_id,
+    date_format(day,'%Y-%m') as month,
+    AVG(weather_state) as totalsum
+FROM Weather
+WHERE  date_format(day,'%Y-%m') LIKE '2019-11%'
+GROUP BY 1,2
+   
+)
+SELECT 
+    country_name,
+    CASE WHEN totalsum <= 15 THEN 'Cold'
+        WHEN totalsum >= 25 THEN 'Hot'
+        ELSE 'Warm' END AS weather_type
+FROM CTE
+LEFT JOIN Countries C
+ON CTE.country_id = C.country_id
+
