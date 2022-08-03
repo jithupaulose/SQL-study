@@ -1,0 +1,23 @@
+https://leetcode.com/problems/employees-earning-more-than-their-managers/
+
+
+# Write your MySQL query statement below
+/**
+
+ONE TABLE: Employee
+id is the primary key column for Employee table
+Employee table indicates the ID of an employee, their name, salary, and the ID of their manager.
+
+PROBLEM:  find the employees who earn more than their managers.
+
+STEPS: SELF JOIN ON id = managerid where managerid is not null and make sure that manager id of employee is not null
+
+
+*/
+
+SELECT
+    E.name AS Employee
+FROM Employee E
+JOIN Employee M
+ON E.managerId = M.id
+where  E.salary > M.salary AND E.managerId is not Null
