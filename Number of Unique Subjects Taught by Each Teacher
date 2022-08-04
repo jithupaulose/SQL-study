@@ -1,0 +1,22 @@
+https://leetcode.com/problems/number-of-unique-subjects-taught-by-each-teacher/
+
+# Write your MySQL query statement below
+
+/**
+One Table: Teacher
+(subject_id, dept_id) is the primary key for Teacher table.
+Teacher table indicates that the teacher with teacher_id teaches the subject subject_id in the department dept_id.
+
+PROBLEM: report the number of unique subjects each teacher teaches in the university.
+
+STEPS:
+    GROUP BY teacher_id
+    COUNT(DISTINCT subject_id ) as unique subject count
+    
+*/
+
+SELECT
+    teacher_id,
+    COUNT(DISTINCT subject_id) AS cnt
+FROM Teacher
+GROUP BY teacher_id
