@@ -1,0 +1,44 @@
+https://leetcode.com/problems/ads-performance/
+
+# Write your MySQL query statement below
+/**
+ONE Table: Ads
+(ad_id, user_id) is the primary key of Ads table.
+Ads table contains the ID of an Ad, the ID of a user, and the action taken by this user regarding this Ad.
+
+
+PROBLEM:
+ company wants to calculate the performance of each Ad. Calculate the PERFORMANCE
+ by Click-Through Rate (CTR)
+ TWO CASES:
+ if the ads total click + total views = 0 , then CTR = 0
+ else total click/(total click + total views)
+ 
+ROUND BY 2 decimal
+ORDER BY ctr DESC, ad_id ASC
+
+STEPS:
+1. IFNULL for O.00 case
+2. ROUND(,2) for round 2 decimal points
+3. SUM(IF) for finding the CTR
+4. (Action = 'Clicked',1,0)*100/ (Action <> 'Viewed',1,0) for CTR
+5. GROUP BY ad_id
+6. ORDER BY ctr DESC, ad_id ASC
+
+*/
+
+SELECT 
+    ad_id,
+    ROUND(IFNULL(
+            SUM(IF(action = 'Clicked',1,0))*100/ SUM(IF(action <> 'Ignored',1,0))
+            ,0)
+             ,2) AS ctr
+FROM Ads
+GROUP BY ad_id
+ORDER BY ctr DESC, ad_id ASC
+
+
+
+
+    
+
