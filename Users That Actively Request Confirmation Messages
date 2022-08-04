@@ -1,0 +1,31 @@
+https://leetcode.com/problems/users-that-actively-request-confirmation-messages/
+
+# Write your MySQL query statement below
+/**
+Two Table:Signups/Confirmations
+user_id is the primary key for Signups table.
+(user_id, time_stamp) is the primary key for Confirmations table.
+
+Signups contains information about the signup time for the user with ID user_id.
+Confirmations table indicates that the user with ID user_id requested a confirmation message at time_stamp and that confirmation message was either confirmed ('confirmed') or expired without confirming ('timeout').
+
+
+A.time_stamp >= DATE_SUB(B.time_stamp, INTERVAL 24 HOUR)
+
+STEPS:
+    DISTINCT
+    SELF JOIN
+    condition C1.user_id  = C2.user_id AND C1.time_stamp <> C2.time_stamp
+    USE either ABS(TIMESTAMPDIFF(SECOND,time1,time2)) <= 24 * 60 * 60
+    
+*/
+
+SELECT 
+    DISTINCT C1.user_id
+FROM Confirmations C1
+JOIN Confirmations C2
+ON C1.user_id = C2.user_id AND C1.time_stamp <> C2.time_stamp
+WHERE ABS(TIMESTAMPDIFF(second, C2.time_stamp, C1.time_stamp)) <= 24 * 60 * 60
+
+
+# where C1.time_stamp >= DATE_SUB(C2.time_stamp, INTERVAL 24 HOUR)
