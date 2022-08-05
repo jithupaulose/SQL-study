@@ -1,0 +1,30 @@
+https://leetcode.com/problems/game-play-analysis-ii/
+
+# Write your MySQL query statement below
+/**
+
+One Table: Activity
+(player_id, event_date) is the primary key of Activity table.
+Activity table shows the activity of players of some games.
+
+PROBLEM:  report the device that is first logged in for each player.
+
+STEPS:
+    DENSE_RANK() (PARTITION BY player_id ORDER BY event_date ASC)
+    
+*/
+WITH CTE AS
+(
+    SELECT 
+        player_id,
+        device_id,
+        DENSE_RANK() OVER(PARTITION BY player_id ORDER BY event_date ASC ) as rnk
+    FROM Activity
+
+)
+SELECT
+player_id,
+device_id
+FROM CTE
+WHERE rnk = 1
+
