@@ -1,0 +1,24 @@
+https://leetcode.com/problems/delete-duplicate-emails/
+
+# Please write a DELETE statement and DO NOT write a SELECT statement.
+# Write your MySQL query statement below
+
+/**
+ONE table Person 
+id is the primary key of this table
+this table cotains email list 
+
+PROBLEM: delete all the duplicate emails. 
+keeping only one unique email with the smallest id
+USE DELETE statement and not a SELECT one
+
+STEPS:
+SELF JOIN P1 P2
+JOIN P1.email = P2.email AND  P1.id < P2.id which satisfy the condition
+
+*/
+
+DELETE  P2
+FROM Person P1
+JOIN Person P2 
+ON P1.email = P2.email AND P1.id < P2.id
