@@ -1,0 +1,40 @@
+https://leetcode.com/problems/sellers-with-no-sales/
+
+
+# Write your MySQL query statement below
+
+/**
+
+THREE TABLES: Customer/Orders/Seller
+
+customer_id is the primary key for Customer table.
+Customer table contains the information of each customer in the WebStore.
+
+order_id is the primary key for Orders table.
+Orders table contains all orders made in the webstore
+
+seller_id is the primary key for Seller table.
+Seller table contains the information of each seller.
+
+
+PROBLEM: names of all sellers who did not make any sales in 2020.
+
+STEPS: 
+    seller_name FROM Seller
+   left JOIN Seller.seller_id = Orders.seller_id
+   HAVING SUM(CASE WHEN) / COUNT(IF)
+    
+*/
+
+SELECT
+    distinct S.seller_name
+FROM Seller S
+LEFT JOIN Orders O
+ON S.seller_id = O.seller_id 
+group by 1
+
+HAVING sum(if(date_format(sale_date, '%Y') = 2020,1,0)) = 0 
+# HAVING count(CASE WHEN Year(sale_date)=2020 THEN order_id else null end) = 0
+ORDER BY 1
+
+    
