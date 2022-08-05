@@ -1,0 +1,31 @@
+https://leetcode.com/problems/ad-free-sessions/
+
+# Write your MySQL query statement below
+
+/**
+
+TWO TABLES:Playback/Ads
+session_id is the primary key for Playback table.
+session runs during the inclusive interval between start_time and end_time.
+guaranteed that start_time <= end_time and that two sessions for the same customer do not intersect.
+
+ad_id is the primary key for Ads table.
+customer_id is the ID of the customer viewing this ad.
+
+PROBLEM: report all the sessions that did not get shown any ads.
+
+STEPS:
+    LEFT JOIN BOTH TABLES USING Playback.customer_id = Ads.customer_id
+    AND timestamp not between start_time and end_time
+    FILTER with the customer_id empty for the second one.
+    
+
+*/
+
+SELECT 
+    session_id
+FROM Playback Pb
+LEFT JOIN Ads Ad
+ON Pb.customer_id = Ad.customer_id
+                    AND (timestamp BETWEEN start_time AND end_time) 
+WHERE Ad.customer_id is null
