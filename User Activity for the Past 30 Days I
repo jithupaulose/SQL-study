@@ -1,0 +1,20 @@
+https://leetcode.com/problems/user-activity-for-the-past-30-days-i/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Activity.
+There is no primary key for Activity table.
+Activity table shows the user activities for a social media website.
+
+PROBLEM: find the daily active user count for a period of 30 days ending 2019-07-27 inclusively.
+
+
+*/
+SELECT
+    activity_date AS day,
+    COUNT(DISTINCT user_id) AS active_users
+FROM Activity
+WHERE      
+     activity_date <= "2019-07-27" 
+     AND activity_date > DATE_SUB("2019-07-27", INTERVAL 30 DAY)
+GROUP BY 1
