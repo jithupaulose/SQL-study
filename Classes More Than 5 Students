@@ -1,0 +1,15 @@
+https://leetcode.com/problems/classes-more-than-5-students/
+
+# Write your MySQL query statement below
+WITH CTE AS
+(
+    SELECT 
+        class,
+        COUNT(DISTINCT student) AS cnt
+    FROM Courses
+    group by 1
+)
+
+SELECT 
+    class
+FROM CTE where cnt >= 5
