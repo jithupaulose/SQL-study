@@ -1,0 +1,30 @@
+https://leetcode.com/problems/project-employees-ii/
+
+# Write your MySQL query statement below
+/**
+
+Two Table: Project/Employee
+
+(project_id, employee_id) is the primary key of Project table.
+employee_id is a foreign key to Employee table.
+Project table indicates that the employee with employee_id is working on the project with project_id.
+
+employee_id is the primary key of Employee table.
+Employee table contains information about one employee.
+
+PROBLEM: reports all the projects that have the most employees.
+
+*/
+
+WITH CTE AS
+(
+SELECT 
+    project_id,
+    DENSE_RANK() OVER(ORDER BY COUNT(E.employee_id) DESC) AS cnt
+FROM Project P
+JOIN Employee E
+    ON P.employee_id = E.employee_id
+GROUP BY 1
+)
+
+SELECT project_id FROM CTE WHERE cnt = 1
