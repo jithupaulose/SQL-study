@@ -1,0 +1,28 @@
+https://leetcode.com/problems/employees-whose-manager-left-the-company/
+
+# Write your MySQL query statement below
+
+/**
+ONE TABLE: Employees
+employee_id is the primary key for Employees table.
+Employees table contains information about the employees, their salary, and the ID of their manager. Some employees do not have a manager (manager_id is null).
+
+PROBLEM: report the IDs of the employees whose salary is strictly less than $30000 and whose manager left the company.
+
+TWO WAYS to solve this 
+SELECT 
+    employee_id
+FROM Employees
+WHERE salary < 30000 AND manager_id NOT IN (SELECT employee_id FROM Employees)
+ORDER BY 1
+
+*/
+SELECT 
+    E.employee_id
+FROM Employees E
+LEFT JOIN Employees M
+ON E.manager_id = M.employee_id
+WHERE E.salary < 30000
+        AND E.manager_id is not null
+                AND M.employee_id is null
+ORDER BY 1
