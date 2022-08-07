@@ -1,0 +1,32 @@
+https://leetcode.com/problems/the-number-of-employees-which-report-to-each-employee/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Employees
+employee_id is the primary key for Employees table.
+Employees table contains information about the employees and the id of the manager they report to.
+Some employees do not report to anyone (reports_to is null). 
+
+PROBLEM: report the ids and the names of all managers, the number of employees who report directly to them, and the average age of the reports rounded to the nearest integer
+
+STEPS:
+    report the ids and the names of all managers: SELF JOIN where E.reports_to :: M.employee_id and where E.reports_to is not null
+    number of employees who report directly to them :: COUNT(employee_id of E table)
+    average age of the reports rounded to the nearest integer:: ROUND(,0), AVG(age in employee table)
+    GROUP BY M.employee_id
+    
+    
+    
+*/
+
+SELECT
+    M.employee_id,
+    M.name,
+    COUNT(E.employee_id) AS reports_count,
+    round(avg(E.age),0) AS average_age
+FROM Employees E
+JOIN Employees M
+ON E.reports_to = M.employee_id
+WHERE E.reports_to IS NOT NULL
+GROUP BY 1
+ORDER BY 1
