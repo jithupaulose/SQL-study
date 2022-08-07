@@ -1,0 +1,28 @@
+https://leetcode.com/problems/friendly-movies-streamed-last-month/
+
+# Write your MySQL query statement below
+/**
+Two Tables: TVProgram/Content
+
+(program_date, content_id) is the primary key for TVProgram table.
+TVProgram table contains information of the programs on the TV.
+
+content_id is the primary key for Content table.
+
+PROBLEM: report the distinct titles of the kid-friendly movies streamed in June 2020.
+
+STEPS:  
+    distinct titles :: DISTINCT title FROM Content TABLE
+    Kids_content :: Kids_content = 'Y'
+    movies streamed :: content_type = 'Movies'
+    in June 2020 :: date_format(program_date, '%Y-%m') = '2020-06'
+*/
+
+SELECT
+    DISTINCT title
+FROM Content C
+JOIN TVProgram T
+ON C.content_id = T.content_id
+WHERE Kids_content = 'Y' 
+    AND content_type = 'Movies' 
+        AND date_format(program_date, '%Y-%m') = '2020-06'
