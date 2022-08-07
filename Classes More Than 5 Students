@@ -13,3 +13,10 @@ WITH CTE AS
 SELECT 
     class
 FROM CTE where cnt >= 5
+
+
+SELECT
+    class
+FROM Courses
+GROUP BY 1
+HAVING COUNT(DISTINCT student) >= 5
