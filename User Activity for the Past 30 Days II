@@ -1,0 +1,33 @@
+https://leetcode.com/problems/user-activity-for-the-past-30-days-ii/
+
+# Write your MySQL query statement below
+/**
+one Table: Activity
+There are no primary key. Might contain duplicate rows
+Activity table contain user activities for a social media website.
+activity_type is ENUM
+
+PROBLEM:
+average number of sessions per user for a period of 30 days ending 2019-07-27
+rounded to 2 decimal places
+
+STEPS:
+ 1. Build a CTE which get the COUNT(DISTINCT session_id) AND COUNT(DISTINCT user_id)
+ 2. FILTER which activity_date blw the date and 30 days before DATE_SUB(, INTERVAL 20 DAY)
+ 3. SELECT THE COUNT(DISTINCT session_id)/COUNT(DISTINCT user_id) in IFNULL
+ 4. WITH ROUND 2 decimal also
+*/
+
+
+WITH CTE AS
+(
+SELECT 
+    COUNT( DISTINCT session_id) AS sessCount,
+     COUNT( DISTINCT user_id) AS userIDcount
+FROM Activity
+WHERE activity_date BETWEEN DATE_SUB('2019-07-27', INTERVAL 29 DAY) AND '2019-07-27'
+)
+
+SELECT 
+    IFNULL(ROUND(sessCount/userIDcount,2),0) AS average_sessions_per_user
+FROM CTE
