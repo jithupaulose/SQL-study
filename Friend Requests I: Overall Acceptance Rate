@@ -1,0 +1,41 @@
+https://leetcode.com/problems/friend-requests-i-overall-acceptance-rate/
+
+
+# Write your MySQL query statement below
+
+/**
+TWO tables FriendRequest/RequestAccepted
+SENDER_ID and SEND_TO_ID with the date of the request in FriendRequest table.
+requester_id and accepter_id with the accept_date in RequestAccepted table.
+Both table have no primary keys for both tables
+
+
+PROBLEM: find the overall acceptance rate of requests
+NO of acceptance/ NO of requests
+Round by 2 decimal
+Need the distinct values of sender and reciever
+No request keep 0.00 means coalesce add
+
+STEPS
+    Create CTE for accepted from RequestAccepted and send from FriendRequest
+    need count distinct pair (sender_id,send_to_id) & (requester_id,accepter_id)
+    divide both count by round of 2 decimal with coalese()/ifnull()
+*/
+
+WITH Send AS 
+(
+    SELECT 
+        COUNT(DISTINCT sender_id, send_to_id) AS send_cnt
+    FROM FriendRequest
+),
+
+Accept AS 
+(
+    SELECT 
+        COUNT(DISTINCT requester_id, accepter_id) AS accept_cnt
+    FROM RequestAccepted
+)
+
+SELECT 
+   Round(IFNULL(accept_cnt/send_cnt,0.00),2) AS accept_rate
+FROM Accept,Send
