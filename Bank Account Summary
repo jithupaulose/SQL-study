@@ -1,0 +1,32 @@
+https://leetcode.com/problems/bank-account-summary/
+
+
+# Write your MySQL query statement below
+
+WITH sentTrans AS
+(
+    SELECT
+        paid_by as user_id,
+        SUM(amount) as paid
+    FROM Transactions
+    GROUP BY paid_by
+),
+recievedTran AS
+(
+SELECT
+    paid_to as user_id,
+    SUM(amount) as recieved
+FROM Transactions
+GROUP BY paid_to
+)
+
+SELECT
+    U.user_id,
+    U.user_name,
+    (U.credit - IFNULL(paid,0) + IFNULL(recieved,0) )  AS credit,
+    CASE WHEN (U.credit - IFNULL(paid,0) + IFNULL(recieved,0) )  < 0 THEN 'Yes' ELSE 'No' END AS credit_limit_breached
+FROM Users U
+LEFT JOIN sentTrans ST
+    ON U.user_id = ST.user_id
+LEFT JOIN recievedTran RT
+    ON U.user_id = RT.user_id
