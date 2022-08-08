@@ -1,0 +1,38 @@
+https://leetcode.com/problems/apples-oranges/
+
+# Write your MySQL query statement below
+
+/**
+One Table: Sales
+(sale_date, fruit) is the primary key for Sales table.
+Sales table contains the sales of "apples" and "oranges" sold each day.
+
+PROBLEM: report the difference between the number of apples and oranges sold each day.
+
+STEPS:
+    each day::: GROUP BY sale_date
+    SUM (Case Statement)
+    
+    
+USING WINDOW FUNCTION to solve::::::::::
+
+SELECT DISTINCT 
+    sale_date,
+SUM(CASE WHEN fruit = 'apples' THEN sold_num
+             WHEN fruit = 'oranges' THEN -sold_num END) OVER( PARTITION BY sale_date ORDER BY sale_date)
+             AS diff
+FROM Sales
+
+*/
+
+SELECT
+    sale_date, 
+    SUM(CASE WHEN fruit = 'apples' THEN sold_num
+             WHEN fruit = 'oranges' THEN -sold_num END)
+        AS diff
+
+FROM Sales
+GROUP BY sale_date
+ORDER BY sale_date
+
+
