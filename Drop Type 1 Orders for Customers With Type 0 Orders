@@ -1,0 +1,37 @@
+https://leetcode.com/problems/drop-type-1-orders-for-customers-with-type-0-orders/
+
+# Write your MySQL query statement below
+/**
+Table: Orders
+order_id is the primary key column for Orders table.
+Orders table indicates the ID of an order, the ID of the customer who ordered it, and the order type.
+
+PROBLEM: SQL query to report all the orders based on the following criteria:
+    If a customer has at least one order of type 0, do not report any order of type 1 from that customer.
+    Otherwise, report all the orders of the customer.
+
+STEPS:
+
+        If a customer has at least one order of type 0, 
+        do not report any order of type 1 from that customer::::::
+        dense_rank() over(partition by customer_id ORDER BY order_type ASC) as rnk
+*/
+
+WITH CTE AS
+(
+SELECT 
+    order_id,
+    customer_id,
+    order_type,
+    dense_rank() over(partition by customer_id ORDER BY order_type  asc) as rnk
+FROM Orders
+)
+
+SELECT  
+    order_id,
+    customer_id, 
+    order_type
+FROM CTE
+WHERE rnk = 1
+
+
