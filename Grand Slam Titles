@@ -1,0 +1,45 @@
+https://leetcode.com/problems/grand-slam-titles/
+
+# Write your MySQL query statement below
+/**
+Two Tables: Players/ Championships
+
+player_id is the primary key for Players table.
+Players table contains the name and the ID of a tennis player.
+
+year is the primary key for Championships table.
+Championships table contains the IDs of the players who won one each tennis tournament of the grand slam.
+
+PROBLEM: report the number of grand slam tournaments won by each player. Do not include the players who did not win any tournament.
+
+
+STEPS:
+    WITH CTE sum all the won under one name. INNER JOIN that with playerID
+
+*/
+WITH CTE AS
+(
+SELECT
+    Wimbledon as won
+FROM Championships
+    UNION ALL
+SELECT
+    Fr_open as won
+FROM Championships
+    UNION ALL
+SELECT
+    US_open as won
+FROM Championships
+    UNION ALL
+SELECT
+    Au_open as won
+FROM Championships
+)
+SELECT 
+    player_id,
+    player_name, 
+    COUNT(won) as grand_slams_count
+FROM Players P
+JOIN CTE 
+ON P.player_id = CTE.won
+group by 1
