@@ -1,0 +1,37 @@
+https://leetcode.com/problems/capital-gainloss/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Stocks
+(stock_name, operation_day) is the primary key for Stocks table.
+Stocks table indicates that the stock which has stock_name had an operation on the day operation_day with the price.
+
+PROBLEM: report the Capital gain/loss for each stock.
+        Capital gain/loss of a stock is the total gain or loss after buying and selling the stock one or many times.
+        
+STEPS:
+    GROUP BY stock_name
+    SUM( CASE statement if BUY then, + else - END)
+    
+    
+USING WINDOW FUNCTION:
+
+SELECT DISTINCT
+    stock_name,
+    SUM(CASE WHEN operation = 'BUY' THEN -price 
+              WHEN operation = 'Sell' THEN  price END) OVER(PARTITION BY stock_name) 
+              AS capital_gain_loss
+FROM Stocks
+
+*/
+
+SELECT
+    stock_name,
+    SUM( CASE WHEN operation = 'BUY' THEN -price 
+              WHEN operation = 'Sell' THEN  price END ) AS capital_gain_loss
+FROM Stocks
+GROUP BY stock_name
+
+
+
+
