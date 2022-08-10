@@ -1,0 +1,33 @@
+https://leetcode.com/problems/tasks-count-in-the-weekend/
+
+# Write your MySQL query statement below
+/**
+One Table: Tasks
+task_id is the primary key for Tasks table.
+table contains the ID of a task, the id of the assignee, and the submission date.
+
+PROBLEM: SQL query to report:
+
+the number of the tasks that were submitted during the weekend (Saturday, Sunday) as weekend_cnt, and
+the number of the tasks that were submitted during the working days as working_cnt.
+
+weekday() /dayofweek()
+
+weekday() counts the days of the week from Monday, as follows and start from 0
+
+0=Monday, 1=Tuesday, 2=Wednesday, 3=Thursday, 4=Friday, 5=Saturday, 6=Sunday
+
+On the other hand dayofweek() counts the days of the week from Sunday and start with 1
+
+1=Sunday, 2=Monday, 3=Tuesday, 4=Wednesday, 5=Thursday, 6=Friday, 7=Saturday
+
+*/
+SELECT
+    SUM(CASE WHEN weekday(submit_date) >= 5 THEN 1 ELSE 0 END) AS weekend_cnt,
+    SUM(CASE WHEN weekday(submit_date) < 5 THEN 1 ELSE 0 END) AS working_cnt
+FROM Tasks
+
+SELECT
+    SUM(CASE WHEN dayofweek(submit_date) in (1,7) THEN 1 ELSE 0 END) AS weekend_cnt,
+    SUM(CASE WHEN dayofweek(submit_date) not in (1,7) THEN 1 ELSE 0 END) AS working_cnt
+FROM Tasks
