@@ -1,0 +1,51 @@
+https://leetcode.com/problems/all-people-report-to-the-given-manager/
+
+# Write your MySQL query statement below
+
+
+/**
+ONE TABLE: Employees
+employee_id is the primary key for Employees table.
+Employees table indicates that the employee with ID employee_id and name employee_name reports his work to his/her direct manager with manager_id.
+
+PROBLEM:  find employee_id of all employees that directly or indirectly report their work to the head of the company.
+
+
+*/
+#SOLUTION 1
+
+WITH RECURSIVE CTE AS
+(
+    SELECT
+        employee_id,
+        1 AS level
+    FROM Employees
+    WHERE manager_id = 1 AND employee_id <> 1
+    
+UNION
+    
+    SELECT
+        E.employee_id,
+        level + 1 as level
+    FROM Employees E
+    JOIN CTE C
+    ON E.manager_id  = C.employee_id
+    WHERE level < 3
+     
+)
+
+SELECT employee_id FROM CTE
+
+
+#SOLUTION 2
+
+SELECT
+
+    E1.employee_id
+
+FROM Employees E1
+JOIN Employees E2
+JOIN Employees E3
+ON  E1.manager_id = E2.employee_id 
+    AND E2.manager_id = E3.employee_id
+    AND E3.manager_id = 1 AND E1.employee_id <> 1
