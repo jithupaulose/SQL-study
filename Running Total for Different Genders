@@ -1,0 +1,36 @@
+https://leetcode.com/problems/running-total-for-different-genders/
+
+# Write your MySQL query statement below
+  
+/**
+ONE TABLE:Scores
+(gender, day) is the primary key for Scores table.
+Scores table indicates that a player_name and with gender has scored score_point in someday.
+
+PROBLEM:: Find the SQL query to find the total score for each gender on each day.
+
+STEPS:
+    GROUP BY player_name, gender,day
+    ORDER BY gender, day
+    
+*/
+
+# SELECT gender, day, 
+#        SUM(score_points) OVER(PARTITION BY gender ORDER BY day) AS total
+# FROM Scores
+
+# SELECT 
+#     a.gender, 
+#     a.day, 
+#     SUM(b.score_points) AS total 
+# FROM 
+#     Scores a 
+#     JOIN Scores b ON a.gender = b.gender AND a.day >= b.day
+# GROUP BY 1, 2
+# ORDER BY 1, 2; 
+
+
+
+SELECT gender, day, 
+        SUM(score_points) OVER(PARTITION BY gender ORDER BY day) AS total
+ FROM Scores
