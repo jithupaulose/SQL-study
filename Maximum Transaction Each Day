@@ -1,0 +1,24 @@
+https://leetcode.com/problems/maximum-transaction-each-day/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Transactions
+transaction_id is the primary key for this table.
+Transactions table contains information about one transaction.
+
+PROBLEM: report the IDs of the transactions with the maximum amount on their respective day. If in one day there are multiple such transactions, return all of them.
+
+
+*/
+WITH CTE AS
+(
+SELECT 
+    transaction_id,
+    DENSE_RANK() OVER(PARTITION BY date_format(day,'%Y-%m-%d') ORDER BY amount DESC) as rnk
+FROM Transactions
+)
+SELECT 
+    transaction_id
+FROM CTE 
+WHERE rnk = 1
+ORDER BY 1
