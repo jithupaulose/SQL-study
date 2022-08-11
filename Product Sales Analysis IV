@@ -1,0 +1,38 @@
+https://leetcode.com/problems/product-sales-analysis-iv/
+
+# Write your MySQL query statement below
+/**
+Two Tables: Sales/ Product
+sale_id is the primary key of this table.
+product_id is a foreign key to Product table.
+Sales table shows the ID of the product and the quantity purchased by a user.
+
+product_id is the primary key of this table.
+Product table indicates the price of each product.
+
+PROBLEM: reports for each user the product id on which the user spent the most money.
+
+STEPS:
+  
+WITH CTE + dense_rank() partition by the user_id . order by sum of quantity * price
+GROUP BY product_id, user_id
+
+*/
+
+WITH CTE AS
+(
+SELECT
+    S.product_id,
+    S.user_id,
+    DENSE_RANK() OVER(partition by user_id order by SUM(quantity * price) desc) as rnk
+FROM Sales S
+JOIN Product P
+ON S.product_id = P.product_id
+GROUP BY 1, 2
+)
+
+SELECT 
+    user_id,
+    product_id
+FROM CTE 
+WHERE rnk = 1
