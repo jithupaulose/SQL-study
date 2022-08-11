@@ -1,0 +1,39 @@
+https://leetcode.com/problems/account-balance/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Transactions
+
+(account_id, day) is the primary key for this table.
+
+
+PROBLEM: report the balance of each user after each transaction
+
+STEPS:
+CUMILATTIVE SUM . So we can use SELF JOIN 
+
+*/
+# FIRST APPROACH - using SELF JOIN 
+
+SELECT
+    T1.account_id,
+    T1.day,
+    SUM(CASE WHEN T2.type = 'Deposit' THEN T2.amount 
+             WHEN T2.type = 'Withdraw' THEN -T2.amount ELSE 0 END
+       ) AS balance
+FROM Transactions T1
+JOIN Transactions T2
+ON  T1.account_id = T2.account_id AND T1.day >= T2.day
+GROUP BY 1, 2
+ORDER BY 1, 2
+
+# SECOND APPROACH - using WINDOW FUNCTION
+
+SELECT 
+    account_id,
+    day,
+    SUM( CASE WHEN type = 'Deposit' THEN amount
+              WHEN type = 'Withdraw' THEN -amount
+        ELSE 0 END
+       ) OVER( PARTITION BY account_id ORDER BY account_id, day ) AS balance
+FROM Transactions
