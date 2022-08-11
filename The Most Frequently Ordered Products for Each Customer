@@ -1,0 +1,38 @@
+https://leetcode.com/problems/the-most-frequently-ordered-products-for-each-customer/
+
+# Write your MySQL query statement below
+/**
+3 TABLES: Customers/ Orders / Products
+
+customer_id is the primary key for Customers table.
+Customers table contains information about the customers.
+
+order_id is the primary key for this table.
+Table contains information about the orders made by customer_id.
+
+product_id is the primary key for Products table.
+Products table contains information about the products.
+
+PROBLEM:: Find the most frequently ordered product(s) for each customer.
+
+*/
+
+WITH CTE AS
+(
+SELECT 
+    O.customer_id,
+    O.product_id,
+    P.product_name,
+    DENSE_RANK() OVER(PARTITION BY customer_id ORDER BY COUNT(order_id) DESC) AS rnk
+FROM Orders O
+JOIN Products P
+ON O.product_id = P.product_id
+GROUP BY 1, 2
+)
+
+SELECT 
+    customer_id,
+    product_id,
+    product_name
+FROM CTE
+WHERE rnk = 1
