@@ -1,0 +1,47 @@
+https://leetcode.com/problems/number-of-calls-between-two-persons/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Calls
+Calls table does not have a primary key, it may contain duplicates.
+table contains the duration of a phone call between from_id and to_id.
+from_id != to_id
+
+PROBLEM: report the number of calls and the total call duration between each pair of distinct persons (person1, person2) where person1 < person2.
+
+
+WITH CTE AS
+(
+    SELECT 
+        from_id AS person1,
+        to_id AS person2,
+        duration
+    FROM Calls
+    WHERE from_id < to_id
+UNION ALL
+    SELECT
+        to_id AS person1,
+        from_id AS person2,
+        duration
+    FROM Calls
+    WHERE to_id < from_id
+
+)
+SELECT 
+    person1,
+    person2,
+    COUNT(*) AS call_count,
+    SUM(duration) AS total_duration
+FROM CTE
+GROUP BY 1,2
+    
+
+*/ 
+
+SELECT
+    LEAST(from_id,to_id) AS person1,
+    GREATEST(from_id,to_id) AS person2,
+    COUNT(*) AS call_count,
+    SUM(duration) AS total_duration
+FROM Calls
+GROUP BY 1,2
