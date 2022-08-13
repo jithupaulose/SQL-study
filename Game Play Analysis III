@@ -1,0 +1,35 @@
+https://leetcode.com/problems/game-play-analysis-iii/
+
+# Write your MySQL query statement below
+/**
+One table: Activity
+(player_id, event_date) is the primary key of Activity table.
+Activity table shows the activity of players of some games.
+
+
+PROBLEM: report for each player and date, how many games played so far by the player.
+
+SOLUTION 1
+USING Cumilative SELF JOIN way
+
+SOLUTION 2
+Using WINDOW Function
+
+*/
+
+#Solution 1
+SELECT
+    A1.player_id,
+    A1.event_date,
+    SUM(A2.games_played) as games_played_so_far
+FROM Activity A1
+JOIN Activity A2
+ON A1.player_id = A2.player_id and A1.event_date >= A2.event_date
+GROUP BY 1, 2
+
+#Solution 2
+SELECT
+    player_id,
+    event_date,
+    SUM(games_played) OVER(PARTITION BY player_id ORDER BY event_date) AS games_played_so_far
+FROM Activity
