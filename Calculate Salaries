@@ -1,0 +1,43 @@
+https://leetcode.com/problems/calculate-salaries/
+
+
+# Write your MySQL query statement below
+/**
+One Table: Salaries
+Salaries table contains the company id, the id, the name, and the salary for an employee.
+
+
+PROBLEM:  find the salaries of the employees after applying taxes.
+
+The tax rate is calculated for each company based on the following criteria:
+    0% If the max salary of any employee in the company is less than $1000.
+    24% If the max salary of any employee in the company is in the range [1000, 10000] inclusive.
+    49% If the max salary of any employee in the company is greater than $10000.
+    
+STEPS:
+    ROUND(,0)
+    WITH CTE , GROUP BY company_id find the  CASE Statement max(salary) as tax_rates
+    LEFT JOIN wtih the Salaries table
+
+*/
+
+WITH CTE AS
+(
+SELECT 
+    company_id,
+    CASE WHEN MAX(salary) < 1000 THEN 0
+         WHEN MAX(salary) BETWEEN 1000 AND 10000 THEN .24
+         WHEN MAX(salary) > 10000 THEN .49 END
+    AS tax_rates
+FROM Salaries
+GROUP BY company_id
+) 
+
+SELECT 
+    S.company_id,
+    S.employee_id,
+    S.employee_name,
+    ROUND(S.salary - (S.salary * C.tax_rates),0) as salary
+FROM Salaries S
+LEFT JOIN CTE C
+ON S.company_id = C.company_id
