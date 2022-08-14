@@ -1,0 +1,29 @@
+https://leetcode.com/problems/count-apples-and-oranges/
+
+# Write your MySQL query statement below
+
+/*
+Two tables: Boxes/Chests
+
+box_id is the primary key for Boxes table.
+chest_id is a foreign key of the chests table.
+Boxes table contains information about the boxes and the number of oranges and apples they have. Each box may include a chest, which also can contain oranges and apples.
+
+chest_id is the primary key for Chests table.
+Chests table contains information about the chests and the corresponding number of oranges and apples they have.
+
+PROBLEM:  count the number of apples and oranges in all the boxes. If a box contains a chest, you should also include the number of apples and oranges it has.
+
+
+STEPS: 
+    LEFT JOIN ON chest_id
+    SUM() + coalesce/ifnull
+
+*/
+SELECT 
+    SUM(B.apple_count + coalesce(C.apple_count,0)) AS apple_count,
+    SUM(B.orange_count + coalesce(C.orange_count,0)) AS orange_count
+FROM Boxes B
+LEFT JOIN Chests C
+ON B.chest_id = C.chest_id
+
