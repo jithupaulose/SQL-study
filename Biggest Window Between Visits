@@ -1,0 +1,32 @@
+https://leetcode.com/problems/biggest-window-between-visits/
+
+# Write your MySQL query statement below
+/**
+One table:UserVisits
+
+UserVisits table does not have a primary key.
+UserVisits table contains logs of the dates that users visited a certain retailer.
+
+PROBLEM:  SQL query that will, for each user_id, find out the largest window of days between each visit and the one right after it (or today if you are considering the last visit).
+    ordered by user_id.
+    
+STEPS:
+    GROUP BY user_id
+    FIND THE LARGEST Window : LEAD(, 1, '2021-1-1') over(partition by user_id order by visit_date)
+    MAX(DATEDIFF())
+    
+*/
+
+WITH CTE AS
+(
+    SELECT
+        user_id,
+        visit_date,
+        LEAD(visit_date,1,'2021-1-1') OVER(PARTITION BY user_id ORDER BY visit_date) AS nextDay
+    FROM UserVisits
+)
+SELECT
+    user_id,
+    MAX(DATEDIFF(nextDay,visit_date)) AS biggest_window
+FROM CTE 
+GROUP BY user_id
