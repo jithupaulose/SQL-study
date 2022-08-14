@@ -1,0 +1,35 @@
+https://leetcode.com/problems/project-employees-iii/
+
+# Write your MySQL query statement below
+/**
+Two Table: Project/Employee
+
+(project_id, employee_id) is the primary key of Project table.
+Project table indicates that the employee with employee_id is working on the project with project_id.
+
+employee_id is the primary key of Employee table.
+Employee table contains information about one employee.
+
+PROBLEM: reports the most experienced employees in each project. In case of a tie, report all employees with the maximum number of experience years.
+
+STEPS:
+    WITH DENSE_RANK() 
+    JOIN      
+
+*/
+WITH CTE AS
+(
+SELECT
+    project_id, 
+    P.employee_id,
+    DENSE_RANK() OVER(partition by project_id order by experience_years  DESC) as rnk
+FROM Project P
+JOIN Employee E
+    ON  P.employee_id = E.employee_id
+
+)
+SELECT 
+    project_id,
+    employee_id
+FROM CTE 
+WHERE rnk = 1
