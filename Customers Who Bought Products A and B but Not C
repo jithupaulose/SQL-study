@@ -1,0 +1,43 @@
+https://leetcode.com/problems/customers-who-bought-products-a-and-b-but-not-c/
+
+# Write your MySQL query statement below
+/**
+Two Tables: Customers/ Orders
+
+customer_id is the primary key for Customers table.
+customer_name is the name of the customer.
+
+order_id is the primary key for Orders table.
+customer_id is the id of the customer who bought the product "product_name".
+
+PROBLEM: report the customer_id and customer_name of customers who bought products "A", "B" but did not buy the product "C" since we want to recommend them to purchase this product.
+
+ordered by customer_id
+
+STEPS:
+    JOIN BY customer_id = customer_id
+    WITH CTE
+    HAVING ( CASE STATEMENT)
+*/
+
+WITH CTE AS
+(
+SELECT
+    C.customer_id,
+    customer_name,
+    product_name
+FROM Customers C
+JOIN Orders O 
+ON C.customer_id = O.customer_id
+)
+SELECT
+    customer_id,
+    customer_name
+FROM CTE
+GROUP BY 1
+HAVING 
+    SUM(CASE WHEN product_name = 'C' then 1 else 0 end) = 0 
+AND 
+    SUM(CASE WHEN product_name = 'A' then 1 else 0 end) > 0 
+AND 
+    SUM(CASE WHEN product_name = 'B' then 1 else 0 end) > 0
