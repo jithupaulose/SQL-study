@@ -1,0 +1,36 @@
+https://leetcode.com/problems/arrange-table-by-gender/
+
+# Write your MySQL query statement below
+
+/**
+ONE TABLE: Genders
+
+user_id is the primary key for Genders table.
+gender is ENUM of type 'female', 'male', or 'other'.
+Genders table contains the ID of a user and their gender.
+The table has an equal number of 'female', 'male', and 'other'
+
+PROBLEM:  rearrange the Genders table such that the rows alternate between 'female', 'other', and 'male' in order. The table should be rearranged such that the IDs of each gender are sorted in ascending order.
+
+STEPS:
+    DENSE_RANK() OVER(PARTITION BY gender ORDER BY user_id ASC) 
+    CASE statement WHEN gender = 'female' THEN 1 WHEN gender = 'other' THEN 2 WHEN gender = 'male' THEN 3
+    ORDER BY
+*/
+
+WITH CTE AS
+(
+SELECT 
+    user_id,
+    gender,
+    DENSE_RANK() OVER(PARTITION BY gender ORDER BY user_id ASC) AS rnk,
+    CASE WHEN gender = 'female' THEN 1
+         WHEN gender = 'other' THEN 2
+         WHEN gender = 'male' THEN 3 END AS GenderOrder
+FROM Genders
+)
+SELECT
+    user_id,
+    gender
+FROM CTE
+ORDER BY rnk,GenderOrder
