@@ -1,0 +1,27 @@
+https://leetcode.com/problems/evaluate-boolean-expression/
+
+# Write your MySQL query statement below
+/**
+Two Tables: Variables/Expressions
+
+name is the primary key for Variables table.
+Variables table contains the stored variables and their values.
+
+(left_operand, operator, right_operand) is the primary key for Expressions table.
+Expressions table contains a boolean expression that should be evaluated.
+*/
+
+SELECT
+    left_operand,
+    operator,
+    right_operand,
+    CASE WHEN operator = '=' AND Vleft.value = Vright.value THEN 'true'
+    WHEN operator = '>' AND Vleft.value > Vright.value THEN 'true'
+    WHEN operator = '<' AND Vleft.value < Vright.value THEN 'true'
+    ELSE 'false' END
+    AS value
+FROM Expressions E
+JOIN Variables Vleft
+    ON E.left_operand = Vleft.name
+JOIN Variables Vright
+    ON E.right_operand = Vright.name
