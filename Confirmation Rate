@@ -1,0 +1,41 @@
+https://leetcode.com/problems/confirmation-rate/
+
+# Write your MySQL query statement below
+/**
+Two Tables: Signups/Confirmations
+
+user_id is the primary key for Signups table.
+Signups table contains information about the signup time for the user with ID user_id.
+
+(user_id, time_stamp) is the primary key for Confirmations table.
+Confirmations table indicates that the user with ID user_id requested a confirmation message at time_stamp and that confirmation message was either confirmed ('confirmed') or expired without confirming ('timeout').
+
+PROBLEM: 
+    find the confirmation rate of each user
+    confirmation rate of a user is the number of 'confirmed' messages divided by the total number of requested confirmation messages.
+    ROUND(,2)
+    
+STEPS:
+    WITH CTE find the number of userid who action is confirmed and total no
+    SUM(CASE statement) & COUNT(no of actions)
+    ROUND(,2)
+    IFNULL(,0)
+*/
+
+WITH CTE AS
+(
+SELECT 
+    user_id,
+    SUM(CASE WHEN action = 'confirmed' THEN 1 ELSE 0 END) AS totalConfirmed,
+    COUNT(action) AS totalAction
+FROM Confirmations
+GROUP BY user_id
+)
+
+SELECT
+    S.user_id,
+    ROUND(IFNULL(SUM(totalConfirmed/totalAction),0),2) AS confirmation_rate
+FROM Signups S
+LEFT JOIN CTE C
+ON S.user_id = C.user_id
+GROUP BY 1
