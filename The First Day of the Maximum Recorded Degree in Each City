@@ -1,0 +1,35 @@
+https://leetcode.com/problems/the-first-day-of-the-maximum-recorded-degree-in-each-city/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Weather
+(city_id, day) is the primary key for Weather table.
+Weather table contains the degree of the weather of a city on a certain day.
+All the degrees are recorded in the year 2022.
+
+PROBLEM: 
+     report the day that has the maximum recorded degree in each city.
+     If the maximum degree was recorded for the same city multiple times, return the earliest day among them.
+    ORDER BY city_id
+
+STEPS:
+    WITH CTE + DENSE_RANK() OVER(partition by city_id ORDER BY degree desc, day ASC)
+    
+*/
+
+WITH CTE AS
+(
+    SELECT
+        city_id,
+        day,
+        degree,
+        DENSE_RANK() OVER(PARTITION BY city_id ORDER BY degree DESC, day ASC) AS rnk
+    FROM Weather
+)
+SELECT
+    city_id,
+    day,
+    degree
+FROM CTE
+WHERE rnk = 1
+GROUP BY 1
