@@ -1,0 +1,40 @@
+https://leetcode.com/problems/find-the-missing-ids/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Customers
+
+customer_id is the primary key for Customers table.
+Customers table contains the name and the id customer.
+
+PROBLEM: find the missing customer IDs.
+        missing IDs are ones that are not in the Customers table but are in the range between 1 and the maximum customer_id present in the table.
+       maximum customer_id will not exceed 100. 
+        ordered by ids in ascending order.
+        
+STEPS:
+    USING recursive CTE find the 1 to 100 as ids
+    THEN find the max(id) and keep id <= max(id) and id not in the customer table.
+*/
+
+
+
+
+WITH RECURSIVE CTE AS
+(
+    SELECT 
+        1 AS ids
+  UNION
+    SELECT 
+        ids + 1
+    FROM CTE
+    WHERE ids < 100
+    
+)
+SELECT 
+    ids
+FROM CTE
+WHERE ids <= (SELECT MAX(customer_id) FROM Customers) 
+    AND
+    ids NOT IN (SELECT customer_id FROM Customers) 
+ORDER BY 1
