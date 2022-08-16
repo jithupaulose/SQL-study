@@ -1,0 +1,28 @@
+https://leetcode.com/problems/number-of-times-a-driver-was-a-passenger/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Rides
+ride_id is the primary key for Rides table.
+Rides table contains the ID of the driver and the ID of the passenger that rode in ride_id.
+Note that driver_id != passenger_id.
+
+PROBLEM: report the ID of each driver and the number of times they were a passenger.
+
+STEPS:
+    SELF JOIN: Need to count from the same table
+    COUNT(DISTINCT ride_id)
+    LEFT JOIN Rides 
+        ON driver_id = passenger_id
+    
+*/
+
+
+
+SELECT
+    A.driver_id,
+    COUNT(DISTINCT B.ride_id) AS cnt
+FROM Rides A
+ LEFT JOIN Rides B
+    ON A.driver_id = B.passenger_id
+group by 1
