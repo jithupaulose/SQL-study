@@ -1,0 +1,34 @@
+https://leetcode.com/problems/activity-participants/
+
+
+# Write your MySQL query statement below
+/**
+Two Tables: Friends/Activities
+
+id is the id of the friend and primary key for Friends table.
+name is the name of the friend.
+activity is the name of the activity which the friend takes part in.
+
+id is the primary key for Activities table.
+name is the name of the activity.
+
+PROBLEM:  find the names of all the activities with neither the maximum nor the minimum number of participants.
+
+STEPS:
+    WITH CTE, dense_rank() over(order by count(activity) asc), dense_rank() over(order by count(activity) desc)
+    GROUP BY ACTIVITY
+    
+*/
+WITH CTE AS
+(
+    SELECT 
+        activity,
+        DENSE_RANK() OVER(ORDER BY COUNT(activity) ASC)  AS lowRnk,
+        DENSE_RANK() OVER(ORDER BY COUNT(activity) DESC) AS highRnk
+FROM Friends
+GROUP BY 1
+)
+SELECT 
+    activity
+FROM CTE
+WHERE lowRnk <> 1 AND highRnk <> 1
