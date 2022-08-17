@@ -1,0 +1,46 @@
+https://leetcode.com/problems/group-employees-of-the-same-salary/
+
+# Write your MySQL query statement below
+
+/**
+One table: Employees
+
+employee_id is the primary key for Employees table.
+Employees table indicates the employee ID, employee name, and salary.
+
+PROBLEM:: A company wants to divide the employees into teams such that all the members on each team have the same salary.
+            Each team should consist of at least two employees.
+            All the employees on a team should have the same salary
+            All the employees of the same salary should be assigned to the same team
+            A team's ID is assigned based on the rank of the team's salary relative to the other teams' salaries, where the team with the lowest salary has team_id = 1
+            
+            SQL query to get the team_id of each employee that is in a team.
+            ordered by team_id,employee_id in ascending order. 
+            
+STEPS:
+    WITH CTE find all group by salary having count(*) > 1 
+    THEN inner join with the Employee table on salery. so we will get all salary. 
+    Using DENSE_RANK() we can create the team_id
+    
+*/
+
+
+WITH CTE AS
+(
+    SELECT
+        employee_id,
+        name,
+        salary
+    FROM Employees
+    GROUP BY salary
+    HAVING COUNT(*) > 1
+)
+SELECT
+    Emp.employee_id,
+    Emp.name,
+    Emp.salary, 
+    DENSE_RANK() OVER( ORDER BY Emp.salary) AS team_id
+FROM Employees Emp
+JOIN CTE 
+    ON Emp.salary = CTE.salary
+ORDER BY team_id, 1
