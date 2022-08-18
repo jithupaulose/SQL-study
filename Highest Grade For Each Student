@@ -1,0 +1,32 @@
+https://leetcode.com/problems/highest-grade-for-each-student/
+
+# Write your MySQL query statement below
+/**
+One Table: Enrollments
+(student_id, course_id) is the primary key of Enrollments table.
+
+PROBLEM: find the highest grade with its corresponding course for each student. In case of a tie, you should find the course with the smallest course_id.
+    ordered by student_id in ascending order
+
+STEPS:
+    DENSE_RANK() OVER(PARTITION BY student_id ORDER BY grade DESC,course_id)
+    
+*/
+WITH CTE AS
+(
+SELECT
+    student_id,
+    course_id,
+    grade,
+    DENSE_RANK() OVER(PARTITION BY student_id ORDER BY grade DESC,course_id) AS rnk
+FROM Enrollments
+)
+
+SELECT
+    student_id,
+    course_id,
+    grade
+FROM CTE
+WHERE rnk = 1
+order by 1
+
