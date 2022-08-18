@@ -1,0 +1,85 @@
+https://leetcode.com/problems/last-person-to-fit-in-the-bus/
+
+# Write your MySQL query statement below
+/**
+One table: Queue
+
+person_id is the primary key column for Queue table.
+Queue table has the information about all people waiting for a bus.
+
+bus has a weight limit of 1000 kilograms, so there may be some people who cannot board
+
+PROBLEM: find the person_name of the last person that can fit on the bus without exceeding the weight limit.
+
+STEPS:
+    WITH CTE self JOIN find the cumilative sum
+    WHERE condition
+*/
+
+#Solution 1 using SELF JOIN
+
+WITH CTE AS
+(
+SELECT
+    Q1.turn,
+    Q1.person_id,
+    Q1.person_name ,
+    Q1.weight AS Weight,
+    SUM(Q2.weight) AS TotalWeight
+    
+FROM Queue Q1
+JOIN Queue Q2
+    ON  Q1.turn >= Q2.turn
+GROUP BY 1
+HAVING SUM(Q2.weight) <= 1000
+ORDER BY 1
+
+) 
+SELECT 
+    person_name 
+FROM CTE
+ORDER BY TotalWeight DESC
+LIMIT 1
+
+
+# SOLUTION 2
+
+
+WITH CTE AS
+(
+SELECT 
+    person_name,
+    SUM(weight) OVER(ORDER BY turn ASC) as totalWeight
+FROM Queue
+GROUP BY turn
+),
+ CTE2 AS
+(
+SELECT 
+    person_name,totalWeight
+FROM CTE
+HAVING totalWeight <= 1000
+ORDER BY totalWeight DESC
+LIMIT 1
+)
+SELECT
+    person_name
+FROM CTE2
+
+
+#SOLUTION 3 - Different Style
+
+SELECT 
+    A.person_name
+FROM 
+(
+SELECT 
+    person_name, turn,
+    SUM(weight) OVER(ORDER BY turn ASC) as totalWeight
+FROM Queue
+) A
+WHERE totalWeight <= 1000
+GROUP BY turn
+ORDER BY totalWeight DESC
+    LIMIT 1
+
