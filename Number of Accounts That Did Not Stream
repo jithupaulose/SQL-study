@@ -1,0 +1,18 @@
+https://leetcode.com/problems/number-of-accounts-that-did-not-stream/
+
+# Write your MySQL query statement below
+
+#lIST THE COUNT
+#YEAR  OF start_date/END_date= 2021
+#DONOT HAVE ANY SUSCRIPTION stream_date != 2021
+
+
+
+
+SELECT
+COUNT(Sub.account_id) AS accounts_count
+FROM Subscriptions Sub
+JOIN Streams Str
+ON Sub.account_id = Str.account_id
+WHERE (YEAR(start_date) = 2021 OR YEAR(end_date) = 2021) 
+        AND YEAR(stream_date) <> 2021
