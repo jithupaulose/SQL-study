@@ -1,0 +1,32 @@
+https://leetcode.com/problems/reported-posts-ii/
+
+# Write your MySQL query statement below
+/**
+One table: Actions,Removals
+
+There is no primary key for Actions table, it may have duplicate rows.
+
+
+post_id is the primary key of Removals table.
+Each row in this table indicates that some post was removed due to being reported or as a result of an admin review.
+
+
+PROBLEM:  find the average daily percentage of posts that got removed after being reported as spam, rounded to 2 decimal places.
+
+
+
+*/
+WITH CTE AS
+(
+    SELECT
+        action_date,
+        COUNT(DISTINCT R.post_id)/COUNT(DISTINCT A.post_id) *100 AS cnt
+    FROM Actions A
+    LEFT JOIN Removals R
+        ON A.post_id = R.post_id
+    WHERE action = 'report' AND extra = 'spam'
+    GROUP BY 1
+)
+SELECT 
+    ROUND(AVG(cnt),2) AS average_daily_percent
+FROM CTE
