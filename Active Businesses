@@ -1,0 +1,29 @@
+https://leetcode.com/problems/active-businesses/
+
+# Write your MySQL query statement below
+/**
+One Table: Events
+
+(business_id, event_type) is the primary key of Events table.
+Events table logs the info that an event of some type occurred at some business for a number of times
+
+STEPS: 
+    Find the average activity
+*/
+WITH avgActivity AS
+(
+    SELECT
+        event_type,
+        AVG(occurences) AS average
+    FROM Events
+    GROUP BY event_type
+)
+SELECT
+    business_id
+FROM Events E
+JOIN avgActivity A
+ON E.event_type = A.event_type
+GROUP BY 1
+HAVING SUM(CASE WHEN occurences > average THEN 1 ELSE 0 END) > 1
+
+# having SUM(IF(occurences > average,1,0)) > 1
