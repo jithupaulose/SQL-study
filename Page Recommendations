@@ -1,0 +1,48 @@
+https://leetcode.com/problems/page-recommendations/
+
+# Write your MySQL query statement below
+/**
+Two Table: Friendship, Likes
+
+(user1_id, user2_id) is the primary key for Friendship table.
+Friendship table indicates that there is a friendship relation between user1_id and user2_id.
+
+(user_id, page_id) is the primary key for Likes table.
+Likes table indicates that user_id likes page_id.
+
+PROBLEM: Write an SQL query to recommend pages to the user with user_id = 1 using the pages that your friends liked. It should not recommend pages you already liked.
+
+
+STEPS:
+    WITH CTE 
+    find the user1_id FROM Friendship who have user2_id = 1
+    UNION 
+    find the user2_id FROM Friendship who have user1_id = 1
+    (so we will get the all the friends of 1)
+    
+    FIND the distinct page_id from Likes table with WHERE condition.
+       user_id = select all user_id from CTE
+        AND need to remove the one that 1 already liked
+        
+*/
+
+WITH AllFriendTable AS
+(
+    SELECT 
+        user1_id AS user_id
+    FROM Friendship
+        WHERE user2_id = 1
+UNION
+    SELECT 
+        user2_id AS user_id
+    FROM Friendship
+        WHERE user1_id = 1
+)
+
+SELECT 
+
+    DISTINCT page_id  AS recommended_page
+FROM Likes
+WHERE user_id IN (SELECT user_id FROM AllFriendTable)
+    AND 
+    page_id NOT IN (SELECT page_id FROM Likes WHERE user_id = 1)
