@@ -1,0 +1,31 @@
+https://leetcode.com/problems/monthly-transactions-i/
+
+# Write your MySQL query statement below
+/**
+One Table: Transactions
+id is the primary key of Transactions table.
+Transactions table has information about incoming transactions.
+The state column is an enum of type ["approved", "declined"].
+
+PROBLEM:  Find for each month and country, the number of transactions and their total amount, the number of approved transactions and their total amount.
+
+STEPS:
+    for each month and country : GROUP BY month, country
+    Find the month: date_format(trans_date,'%Y-%m')
+    trans_count = COUNT(state)
+    approved_count = SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END)
+    trans_total_amount = SUM(amount)
+    approved_total_amount = SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END)
+
+*/
+
+SELECT
+    date_format(trans_date,'%Y-%m') AS month,
+    country,
+    COUNT(state) AS trans_count,
+    SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,
+    SUM(amount) AS trans_total_amount,
+    SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount
+    
+FROM Transactions
+GROUP BY 1, 2
