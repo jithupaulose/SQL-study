@@ -1,0 +1,27 @@
+https://leetcode.com/problems/managers-with-at-least-5-direct-reports/
+
+# Write your MySQL query statement below
+/**
+One Table: Employee
+id is the primary key column for Employee table.
+Employee table indicates the name of an employee, their department, and the id of their manager.
+If managerId is null, then the employee does not have a manager.
+No employee will be the manager of themself.
+
+PROBLEM: report the managers with at least five direct reports.
+
+STEPS:
+    SELF JOIN Emp , Mgr ON Emp.managerId = Mgr.id
+    DISPLAY Mgr.id
+    GROUP BY Mgr.id
+    HAVING COUNT(Emp.id) >= 5
+
+*/
+
+SELECT
+    Mgr.name
+FROM Employee Emp
+JOIN Employee Mgr
+    ON Emp.managerId = Mgr.id
+GROUP BY 1
+HAVING COUNT(Emp.id) >= 5;
