@@ -1,0 +1,35 @@
+https://leetcode.com/problems/product-price-at-a-given-date/
+
+# Write your MySQL query statement below
+/**
+One Table: Products
+(product_id, change_date) is the primary key of this table.
+Products table indicates that the price of some product was changed to a new price at some date.
+
+PROBLEM:  find the prices of all products on 2019-08-16. Assume the price of all products before any change is 10.
+
+STEPS::
+    DENSE_RANK()
+    IFNULL()
+    LEFT JOIN
+    
+*/
+
+WITH CTE AS
+(
+SELECT
+    product_id,
+    new_price,
+    change_date,
+    DENSE_RANK() OVER(PARTITION BY product_id ORDER BY change_date DESC) as rnk
+FROM Products
+WHERE change_date  <= '2019-08-16'
+)
+SELECT distinct
+    P.product_id,
+    IFNULL(C.new_price,10) AS price
+FROM Products P
+LEFT JOIN CTE C
+ON P.product_id = C.product_id and C.rnk = 1
+
+
