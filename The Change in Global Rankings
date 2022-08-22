@@ -1,0 +1,73 @@
+https://leetcode.com/problems/the-change-in-global-rankings/
+
+# Write your MySQL query statement below
+
+/**
+Two Tables: TeamPoints/PointsChange 
+
+team_id is the primary key for TeamPoints table.
+TeamPoints table contains the ID of a national team, the name of the country it represents, and the points it has in the global rankings. No two teams will represent the same country.
+
+team_id is the primary key for PointsChange table.
+PointsChange table contains the ID of a national team and the change in its points in the global rankings.
+
+PROBLEM:
+    The global ranking of a national team is its rank after sorting all the teams by their points in descending order. If two teams have the same points, we break the tie by sorting them by their name in lexicographical order.
+    
+The points of each national team should be updated based on its corresponding points_change value.
+
+Write an SQL query to calculate the change in the global rankings after updating each team's points.
+
+STEPS:
+    WITH CTE
+    find the ranks of old and changed
+    get the rankdifference
+    
+*/
+#SOUTION 1
+
+WITH CTE AS
+(
+SELECT
+    T.team_id,
+    name,
+    points,
+    (points + points_change) as UpdatedPoints,
+    DENSE_RANK() OVER(ORDER BY points DESC, name) AS rankBefore,
+    DENSE_RANK() OVER(ORDER BY (points + points_change) DESC, name) AS rankAfter
+FROM TeamPoints T
+JOIN PointsChange P
+    ON T.team_id = P.team_id
+    
+)
+SELECT 
+    team_id,
+    name,
+    rankBefore,
+    rankAfter,
+   COALESCE(rankBefore,0) - COALESCE(rankAfter,0) AS rank_diff
+    
+FROM CTE
+
+# SOLUTION 2
+
+WITH CTE AS
+(
+SELECT
+    T.team_id,
+    name,
+    points,
+    (points + points_change) as UpdatedPoints,
+    CAST(DENSE_RANK() OVER(ORDER BY points DESC, name) AS SIGNED) AS rankBefore,
+    CAST(DENSE_RANK() OVER(ORDER BY (points + points_change) DESC, name) AS SIGNED) AS rankAfter
+FROM TeamPoints T
+JOIN PointsChange P
+    ON T.team_id = P.team_id
+    
+)
+SELECT 
+    team_id,
+    name,
+   (rankBefore - rankAfter) AS rank_diff
+    
+FROM CTE
