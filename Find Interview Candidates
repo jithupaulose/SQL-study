@@ -1,0 +1,66 @@
+https://leetcode.com/problems/find-interview-candidates/
+
+
+# Write your MySQL query statement below
+/**
+Two Tables: Contests/Users
+
+contest_id is the primary key for Contests table.
+Contests table contains the LeetCode contest ID and the user IDs of the gold, silver, and bronze medalists.
+It is guaranteed that any consecutive contests have consecutive IDs and that no ID is skipped.
+
+user_id is the primary key for Users table.
+Users table contains information about the users.
+
+PROBLEM:
+report the name and the mail of all interview candidates.
+A user is an interview candidate if at least one of these two conditions is true.
+    The user won any medal in three or more consecutive contests.
+    The user won the gold medal in three or more different contests (not necessarily consecutive). 
+    
+STEPS:
+    MedalWithUsers JOIN ALL
+    LEAD()
+    
+*/
+
+
+WITH MedalWithUsers AS
+(
+SELECT
+    contest_id, gold_medal AS user_id
+FROM Contests
+    UNION 
+SELECT
+    contest_id, silver_medal AS user_id
+FROM Contests
+    UNION 
+SELECT
+    contest_id, bronze_medal AS user_id
+FROM Contests
+),
+GoldWinnerContests AS
+(
+    SELECT
+        gold_medal AS user_id
+    FROM Contests
+    GROUP BY 1
+    HAVING COUNT(*) >=3 
+),
+ConsecutiveThreeMedals AS
+(
+SELECT 
+    user_id,
+    contest_id,
+    LEAD(contest_id,1) OVER(PARTITION BY user_id ORDER BY contest_id) AS contest_id_2nd,
+    LEAD(contest_id,2) OVER(PARTITION BY user_id ORDER BY contest_id) AS contest_id_3nd
+FROM MedalWithUsers
+)
+SELECT
+    name,
+    mail
+FROM Users
+WHERE
+    user_id IN ( SELECT user_id FROM GoldWinnerContests) 
+OR
+    user_id IN (SELECT user_id FROM ConsecutiveThreeMedals WHERE (contest_id_2nd -1 = contest_id) AND (contest_id_3nd -2 = contest_id))
