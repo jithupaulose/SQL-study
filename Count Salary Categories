@@ -1,0 +1,43 @@
+https://leetcode.com/problems/count-salary-categories/
+
+# Write your MySQL query statement below
+/**
+One Table: Accounts
+account_id is the primary key for Accounts table.
+Each row contains information about the monthly income for one bank account.
+
+PROBLEM:
+     report the number of bank accounts of each salary category.
+     
+STEPS: 
+    WITH CTE 
+    CASE STATEMENT
+    UNION
+    LEFT JOIN
+    
+*/
+
+WITH CTEincome AS
+(
+SELECT
+    account_id,
+    CASE WHEN income < 20000 THEN 'Low Salary' 
+         WHEN income > 50000 THEN 'High Salary'
+            ELSE 'Average Salary' END AS category
+FROM Accounts
+),
+CTEcategory AS
+(
+SELECT 'Low Salary' AS category
+UNION
+SELECT 'Average Salary' AS category
+UNION
+SELECT 'High Salary' AS category
+)
+SELECT
+    C1.category,
+    COUNT(C2.account_id) AS accounts_count
+FROM CTEcategory C1
+LEFT JOIN CTEincome C2
+ON C1.category = C2.category
+GROUP BY 1
