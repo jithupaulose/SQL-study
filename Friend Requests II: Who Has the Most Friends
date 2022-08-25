@@ -1,0 +1,33 @@
+https://leetcode.com/problems/friend-requests-ii-who-has-the-most-friends/
+
+
+# Write your MySQL query statement below
+/**
+One Table: RequestAccepted
+
+(requester_id, accepter_id) is the primary key for RequestAccepted table.
+RequestAccepted table contains the ID of the user who sent the request, the ID of the user who received the request, and the date when the request was accepted.
+
+PROBLEM: find the people who have the most friends and the most friends number.
+
+*/
+
+WITH CTE AS
+(
+SELECT
+    requester_id AS user,
+    accepter_id  AS friend
+FROM RequestAccepted
+    UNION ALL
+SELECT
+    accepter_id AS user,
+    requester_id  AS friend
+FROM RequestAccepted
+)
+SELECT 
+    user id,
+    count(distinct friend) as num
+FROM CTE
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 1
