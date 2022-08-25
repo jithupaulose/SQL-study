@@ -1,0 +1,41 @@
+https://leetcode.com/problems/shortest-distance-in-a-plane/
+
+# Write your MySQL query statement below
+/**
+ONE TABLE: Point2D
+(x, y) is the primary key column for this table.
+Point2D table indicates the position of a point on the X-Y plane.
+
+distance between two points p1(x1, y1) and p2(x2, y2) is sqrt((x2 - x1)2 + (y2 - y1)2).
+
+PROBLEM: report the shortest distance between any two points from the Point2D table. Round the distance to two decimal points.
+
+STEPS:
+    Round the distance to two decimal points : ROUND(,2)
+    WITH CTE then call MIN() from CTE
+    in CTE, self join 
+    x1
+    x2
+    y1
+    y2
+    SQRT()
+    POWER(,2)
+    P1.x <> P2.x or P1.y <> P2.y
+    
+*/
+WITH CTE AS
+(
+SELECT
+    P1.x AS x1,
+    P2.x AS x2,
+    P1.y AS y1,
+    P2.y AS y2,
+    ROUND(SQRT(POW(P2.x - P1.x,2)+ POW(P2.y - P1.y,2)),2) as distance
+    
+FROM Point2D P1
+JOIN Point2D P2
+    ON P1.x <> P2.x or P1.y <> P2.y
+)
+SELECT 
+    MIN(distance) AS shortest 
+FROM CTE
