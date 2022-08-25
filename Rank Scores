@@ -1,0 +1,18 @@
+https://leetcode.com/problems/rank-scores/
+
+# Write your MySQL query statement below
+/**
+ONE table Scores
+ID is the primary key of the table
+score are decimal points
+
+PROBLEM: Here we need to rank from highest to lowest. If it is tie, both should have same rank 
+STEPS
+dense_rank() AND ORDER BY
+*/
+
+
+SELECT 
+    score,
+    dense_rank() over(order by score desc) as 'rank'
+FROM Scores
