@@ -2,38 +2,54 @@ https://leetcode.com/problems/movie-rating/
 
 # Write your MySQL query statement below
 /**
-One Table: Friendship
+Three Tables: Movies/Users/MovieRating
 
-(user1_id, user2_id) is the primary key for Friendship table.
-Friendship table indicates that the users user1_id and user2_id are friends.
-Note that user1_id < user2_id.
+movie_id is the primary key for Movies table.
+title is the name of the movie.
 
-PROBLEM: A friendship between a pair of friends x and y is strong if x and y have at least three common friends.
+user_id is the primary key for Users table.
 
-Write an SQL query to find all the strong friendships.
+(movie_id, user_id) is the primary key for MovieRating table.
+MovieRating table contains the rating of a movie by a user in their review.
+created_at is the user's review date. 
+
+PROBLEM:
+
+1. Find the name of the user who has rated the greatest number of movies. In case of a tie, return the lexicographically smaller user name.
+2. Find the movie name with the highest average rating in February 2020. In case of a tie, return the lexicographically smaller movie name.
 
 */
 
-WITH friendsCTE AS
+
+WITH userName AS
 (
 SELECT
-    user1_id AS friend,
-    user2_id AS friendWith
-FROM Friendship
-UNION
+    name,
+    DENSE_RANK() OVER(ORDER BY COUNT(MR.user_id) DESC,name ASC) AS rnk
+FROM Users U
+JOIN MovieRating MR
+    ON U.user_id = MR.user_id
+GROUP BY 1
+),
+movieHigestAvg AS
+(
 SELECT
-    user2_id AS friend,
-    user1_id AS friendWith
-FROM Friendship
+    title,
+    DENSE_RANK() OVER(ORDER BY AVG(MR.rating) DESC,title ASC) AS rnk
+FROM Movies M
+JOIN MovieRating MR
+ON M.movie_id = MR.movie_id
+WHERE date_format(created_at,'%Y-%m') = '2020-02'
+GROUP BY M.movie_id
+    
 )
-
 SELECT
-    F.user1_id,
-    F.user2_id,
-    COUNT(*) AS common_friend
-FROM Friendship F
-JOIN friendsCTE F1 ON F.user1_id  = F1.friend
-JOIN friendsCTE F2 ON F.user2_id  = F2.friend
-AND F1.friendWith = F2.friendWith
-GROUP BY 1, 2
-HAVING COUNT(*) >= 3;
+    name AS results
+FROM userName 
+WHERE rnk = 1
+UNION 
+SELECT
+    title AS results
+FROM movieHigestAvg
+WHERE rnk = 1
+    
