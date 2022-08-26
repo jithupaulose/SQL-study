@@ -1,0 +1,39 @@
+https://leetcode.com/problems/movie-rating/
+
+# Write your MySQL query statement below
+/**
+One Table: Friendship
+
+(user1_id, user2_id) is the primary key for Friendship table.
+Friendship table indicates that the users user1_id and user2_id are friends.
+Note that user1_id < user2_id.
+
+PROBLEM: A friendship between a pair of friends x and y is strong if x and y have at least three common friends.
+
+Write an SQL query to find all the strong friendships.
+
+*/
+
+WITH friendsCTE AS
+(
+SELECT
+    user1_id AS friend,
+    user2_id AS friendWith
+FROM Friendship
+UNION
+SELECT
+    user2_id AS friend,
+    user1_id AS friendWith
+FROM Friendship
+)
+
+SELECT
+    F.user1_id,
+    F.user2_id,
+    COUNT(*) AS common_friend
+FROM Friendship F
+JOIN friendsCTE F1 ON F.user1_id  = F1.friend
+JOIN friendsCTE F2 ON F.user2_id  = F2.friend
+AND F1.friendWith = F2.friendWith
+GROUP BY 1, 2
+HAVING COUNT(*) >= 3;
