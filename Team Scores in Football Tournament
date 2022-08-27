@@ -1,0 +1,35 @@
+https://leetcode.com/problems/team-scores-in-football-tournament/
+
+# Write your MySQL query statement below
+/**
+Two Tables:Teams/Matches
+
+team_id is the primary key of Teams table.
+Teams table represents a single football team.
+
+match_id is the primary key of Matches table.
+Each row is a record of a finished match between two different teams. 
+Teams host_team and guest_team are represented by their IDs in the Teams table (team_id), and they scored host_goals and guest_goals goals, respectively.
+
+You would like to compute the scores of all teams after all matches. Points are awarded as follows:
+A team receives three points if they win a match (i.e., Scored more goals than the opponent team).
+A team receives one point if they draw a match (i.e., Scored the same number of goals as the opponent team).
+A team receives no points if they lose a match (i.e., Scored fewer goals than the opponent team).
+
+STEPS:
+    LEFT JOIN to Teams Table
+    GROUP BY Team_ID
+    SUM(CASE statements)
+    
+*/
+
+SELECT
+    team_id,
+    team_name,
+    SUM(CASE WHEN team_id = host_team AND host_goals > guest_goals THEN 3
+         WHEN team_id = guest_team AND guest_goals > host_goals THEN 3
+         WHEN host_goals = guest_goals THEN 1 ELSE 0 END) AS num_points
+FROM Teams T
+LEFT JOIN Matches M ON T.team_id = M.host_team OR T.team_id = M.guest_team
+GROUP BY team_id
+ORDER BY 3 DESC, 1 ASC
