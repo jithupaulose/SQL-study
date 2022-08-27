@@ -1,0 +1,72 @@
+https://leetcode.com/problems/countries-you-can-safely-invest-in/
+
+# Write your MySQL query statement below
+
+/**
+THREE tables Person || Country || Calls
+id is the primary key of Person table
+country_code is the primary key of Country table
+No primary keys in Calls table
+
+Each row of Person table contains the name of a person and their phone number. 
+Each row of  Country table contains the country name and its code
+Each row of Calls table contains the caller id, callee id and the duration of the call in minutes. caller_id != callee_id
+
+Phone number will be in the form 'xxx-yyyyyyy. xxx is the country code (3 characters) and yyyyyyy is the phone number (7 characters) where x and y are digits. Both can contain leading zeros.
+country_code will be in the form 'xxx' where x is digits.
+
+PROBLEM:  A telecommunications company wants to invest in new countries. The company intends to invest in the countries where the average call duration of the calls in this country is strictly greater than the global average call duration.
+
+1. Find average call duration of the calls in this country
+2. global average call duration.
+
+To find  ::::  find the countries where this company can invest.
+
+
+STEPS:::
+
+ Create dataset with each person and their country
+ Create dataset with all calls and duration in which each person was either the caller or the callee
+ JOIN datasets on person ID, group by country, and filter on average duration using subquery
+ 
+
+
+
+with all_calls as (
+
+    select caller_id as person, duration from calls
+    union all
+    select callee_id as person, duration from calls
+
+)
+
+select c.name as country
+from person as p
+join country as c
+on c.country_code = left(p.phone_number, 3)
+join all_calls as a
+on p.id = a.person
+group by 1
+having avg(duration) > (select avg(duration) from calls)
+*/
+#Second Apporoach
+ 
+
+WITH allPersonsCall AS
+(
+SELECT
+    caller_id AS person, duration
+FROM Calls
+    UNION ALL
+SELECT
+    callee_id AS person, duration
+FROM Calls
+)
+
+SELECT
+C.name AS country
+FROM Person P
+JOIN Country C ON SUBSTRING(P.phone_number,1,3) = C.country_code
+JOIN allPersonsCall A ON A.person = P.id
+GROUP BY 1
+HAVING AVG(A.duration) > (SELECT AVG(duration) FROM Calls)
