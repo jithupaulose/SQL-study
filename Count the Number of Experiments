@@ -1,0 +1,46 @@
+https://leetcode.com/problems/count-the-number-of-experiments/
+
+# Write your MySQL query statement below
+/**
+One Table: Experiments
+
+experiment_id is the primary key for Experiments table.
+platform is an enum with one of the values ('Android', 'IOS', 'Web').
+experiment_name is an enum with one of the values ('Reading', 'Sports', 'Programming').
+Experiments table contains information about the ID of an experiment done with a random person, the platform used to do the experiment, and the name of the experiment.
+
+PROBLEM:
+     report the number of experiments done on each of the three platforms for each of the three given experiments. Notice that all the pairs of (platform, experiment) should be included in the output including the pairs with zero experiments.
+
+STEPS:
+    GROUP BY platform, experiment_name
+        PE.platform,
+    PE.experiment_name,
+    COUNT(experiment_id) AS num_experiments
+
+*/
+WITH platforms AS
+(
+SELECT 'Android' AS platform UNION
+    SELECT 'IOS' AS platform UNION
+        SELECT 'Web' AS platform 
+),
+experiment_names AS
+(
+SELECT 'Reading' AS experiment_name UNION
+    SELECT 'Sports' AS experiment_name UNION
+        SELECT 'Programming' AS experiment_name
+),
+platformsExperiment AS 
+(
+SELECT * FROM platforms,experiment_names
+)
+SELECT
+
+    PE.platform,
+    PE.experiment_name,
+    COUNT(E.experiment_id) AS num_experiments
+FROM platformsExperiment PE
+LEFT JOIN Experiments E
+ON PE.platform = E.platform AND PE.experiment_name = E.experiment_name
+GROUP BY 1,2
