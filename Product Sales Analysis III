@@ -1,0 +1,53 @@
+https://leetcode.com/problems/product-sales-analysis-iii/
+
+# Write your MySQL query statement below
+/**
+Two Tables: Sales/Product
+
+(sale_id, year) is the primary key of Sales table.
+product_id is a foreign key to Product table.
+Sales table shows a sale on the product product_id in a certain year.
+Note that the price is per unit.
+
+product_id is the primary key of Product table.
+Product table indicates the product name of each product.
+
+PROBLEM: selects the product id, year, quantity, and price for the first year of every product sold
+*/
+#First Solution
+
+WITH CTE AS
+(
+    SELECT 
+        product_id,
+        MIN(year) AS first_year
+    FROM Sales
+    GROUP BY 1
+)
+SELECT 
+    product_id,
+    year AS first_year,
+    quantity,
+    price
+FROM Sales 
+WHERE (product_id, year) in (select * from CTE)
+
+#Second Solution
+
+WITH CTE AS
+(
+SELECT
+    product_id,
+    year,
+    quantity,
+    price,
+    dense_rank() over(partition by product_id order by year asc) as rnk
+FROM Sales
+)
+
+SELECT
+     product_id,
+    year AS first_year,
+    quantity,
+    price
+FROM CTE where rnk = 1
