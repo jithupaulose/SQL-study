@@ -1,0 +1,34 @@
+https://leetcode.com/problems/department-highest-salary/
+
+
+# Write your MySQL query statement below
+/**
+Here two tables : Employee/Department 
+JOIN condition departmentId = id
+To find the top three salaries
+Build a CTE with dense_rank() and join two tables
+partition by id, order by salary desc
+Outer select where rank =1
+*/
+
+WITH TOP_SALARY AS
+(
+SELECT
+    
+    Dept.name AS Department,
+    Emp.name AS Employee,
+    Emp.salary AS Salary,
+    dense_rank() over(partition by Emp.departmentId ORDER BY Emp.salary DESC) AS rnk
+    
+FROM Employee Emp
+JOIN Department Dept
+ON Emp.departmentId = Dept.id
+)
+
+SELECT 
+    Department,
+    Employee,
+    Salary
+FROM TOP_SALARY
+WHERE  rnk =1;
+
