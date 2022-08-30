@@ -1,0 +1,42 @@
+https://leetcode.com/problems/suspicious-bank-accounts/
+
+# Write your MySQL query statement below
+/**
+Two Tables: Accounts/Transactions
+
+account_id is the primary key for Accounts table.
+Accounts row contains information about the maximum monthly income for one bank account.
+
+transaction_id is the primary key for Transactions table.
+Transactions row contains information about one transaction.
+
+A bank account is suspicious if the total income exceeds the max_income for this account for two or more consecutive months. The total income of an account in some month is the sum of all its deposits in that month (i.e., transactions of the type 'Creditor').
+
+Write an SQL query to report the IDs of all suspicious bank accounts.
+
+*/
+
+WITH totalTransactions AS
+(
+SELECT
+    T.account_id,
+    month(day) as month,
+    A.max_income
+FROM Transactions T
+JOIN Accounts A
+    ON T.account_id = A.account_id
+GROUP BY 1,2
+HAVING SUM(CASE WHEN type = 'Creditor' THEN amount ELSE 0 END)  > A.max_income
+
+)
+
+SELECT 
+    DISTINCT T1.account_id 
+FROM totalTransactions  T1
+JOIN totalTransactions  T2
+ON T1.account_id = T2.account_id AND PERIOD_DIFF(T2.month, T1.month)=1
+
+
+
+
+
