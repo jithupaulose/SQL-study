@@ -1,0 +1,24 @@
+https://leetcode.com/problems/consecutive-numbers/
+
+# Write your MySQL query statement below
+/**
+Here we want to find the Consecutive Numbers
+Build a CTE which includes LAG,LEAD of num
+THEN SELECT DISTINCT num where condition lag = num = lead
+
+
+*/
+
+WITH CONSECUTIVE_NUM AS
+(
+SELECT 
+    LAG(num) OVER(ORDER BY id) as LAG_NUM,
+    num,
+    LEAD(num) OVER(ORDER BY id) as LEAD_NUM
+FROM Logs
+)
+
+SELECT 
+    DISTINCT num AS ConsecutiveNums
+FROM CONSECUTIVE_NUM
+WHERE LAG_NUM = num AND num = LEAD_NUM;
