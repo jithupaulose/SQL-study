@@ -1,0 +1,36 @@
+https://leetcode.com/problems/users-with-two-purchases-within-seven-days/
+
+# Write your MySQL query statement below
+/**
+
+One Table: Purchases
+purchase_id is the primary key for Purchases table.
+Purchases table contains logs of the dates that users purchased from a certain retailer.
+
+PROBLEM:
+report the IDs of the users that made any two purchases at most 7 days apart.
+
+Return the result table ordered by user_id.
+
+STEPS:
+
+    Using CTE find the Next purchasedate using LAG() over partition by userid, order by date
+    SELECT the distinct user_id FROM cte where DATEDIFF(blw the lagdate and purchase date) <=7
+    group by using the user_id
+    having statement count(user_id) <= 2 
+*/
+WITH CTE AS
+(
+SELECT
+    user_id,
+    purchase_date,
+    Lag(purchase_date) OVER(PARTITION BY user_id ORDER BY purchase_date) AS nextDate
+FROM Purchases
+)
+
+SELECT
+     user_id
+FROM CTE
+WHERE DATEDIFF(purchase_date,nextDate) <=7
+GROUP BY user_id
+HAVING COUNT(user_id) <=2
