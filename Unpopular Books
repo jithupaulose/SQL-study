@@ -1,0 +1,30 @@
+https://leetcode.com/problems/unpopular-books/
+
+# Write your MySQL query statement below
+/** 
+Two Tables: Books / Orders
+
+book_id is the primary key of Books table.
+
+order_id is the primary key of Orders table.
+book_id is a foreign key to the Books table.
+
+PROBLEM: reports the books that have sold less than 10 copies in the last year, excluding books that have been available for less than one month from today. Assume today is 2019-06-23.
+
+STEPS:
+Books LEFT JOIN Orders
+ON Books.book_id = Orders.book_id
+where condition find the books who realased more than one month using ::::DATE_SUB
+GROUP BY using the book_ID
+having sum(case when dispatch_date >= DATE_SUB(dispatch_date,interval 1 year) then quantity else 0 end) < 10
+*/
+
+SELECT
+    B.book_id,
+    B.name
+FROM Books B
+LEFT JOIN Orders O
+ON B.book_id = O.book_id
+WHERE available_from < DATE_SUB('2019-06-23', INTERVAL 1 MONTH)
+GROUP BY 1
+HAVING SUM(CASE WHEN dispatch_date > DATE_SUB('2019-06-23', INTERVAL 1 YEAR) THEN quantity ELSE 0 END) < 10 ;
