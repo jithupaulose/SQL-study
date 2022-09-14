@@ -1,0 +1,27 @@
+https://leetcode.com/problems/second-degree-follower/
+
+
+# Write your MySQL query statement below
+/**
+One table: Follow
+(followee, follower) is the primary key column for this table.
+Follow table indicates that the user follower follows the user followee on a social network.
+
+PROBLEM:
+Write an SQL query to report the second-degree users and the number of their followers.
+
+A second-degree follower is a user who:
+    follows at least one user, and
+    is followed by at least one user.
+ordered by follower.
+
+STEPS:
+    INNER JOIN eliminates the rows which has zero follows by the user.
+
+*/
+
+SELECT
+F1.follower, COUNT(DISTINCT F2.follower) AS num
+FROM Follow F1
+JOIN Follow F2 ON F1.follower = F2.followee
+GROUP BY 1
