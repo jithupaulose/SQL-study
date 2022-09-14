@@ -1,0 +1,35 @@
+https://leetcode.com/problems/employees-with-deductions/
+
+# Write your MySQL query statement below
+/**
+
+Two tables: Employees/Logs
+
+employee_id is the primary key for Employees table.
+Employees contains the id of an employee and the minimum number of hours needed for them to work to get their salary.
+
+(employee_id, in_time, out_time) is the primary key for this table.
+Logs table shows the time stamps for an employee.
+
+PROBLEM: report the IDs of the employees that did not work the needed hours.
+
+STEPS:::
+1. LEFT JOIN Logs table to Employees
+2. GROUP BY employee_id,needed_hours
+3. HAVING needed for checking the employees total working hour less than the needed hour
+
+Total Working Hour = find thetotal sum( convert into hours , So /60)
+    CEIL(/60) is used for rounding off the minites. 
+    TIMESTAMPDIFF(second,,) for getting the actual work
+    IFNULL(,0) for if something missed while left join 
+*/
+SELECT
+E.employee_id
+FROM Employees E
+LEFT JOIN Logs L
+ON E.employee_id = L.employee_id
+GROUP BY E.employee_id,E.needed_hours
+HAVING E.needed_hours >
+SUM(
+CEIL(IFNULL(TIMESTAMPDIFF(second, in_time, out_time),0)/60)
+/60);
