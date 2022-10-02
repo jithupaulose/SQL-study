@@ -1,0 +1,46 @@
+https://leetcode.com/problems/median-employee-salary/
+
+
+# Write your MySQL query statement below
+/**
+One Table: Employee
+
+id is the primary key of the table.
+Employee table indicates the company and the salary of one employee.
+
+Question: Find the rows that contain the median salary of each company.
+
+
+Psuedo Code:
+1. Build a CTE statement
+2. Use window function to find the row numbers for each companies
+2.1 row sorted by salary
+example::
+    for Company A
+    (A,1),(A,2),(A,3),(A,4),(A,5),(A,6)
+3. Use window function to find the total count of employee in each company
+example::
+    for Company A
+    (A,6),(A,6),(A,6),(A,6),(A,6),(A,6)
+4.  put the where conditon
+rowNumber between totalCount/2 and totalCount/2 + 1
+
+*/
+
+WITH meanSalary AS
+(
+    SELECT
+        id,
+        company,
+        salary,
+        ROW_NUMBER() OVER(PARTITION BY company ORDER BY salary) AS salaryRowOrder,
+        COUNT(id) OVER(PARTITION BY company) AS totalCnt
+    FROM Employee
+)
+SELECT
+    id,
+    company,
+    salary
+FROM meanSalary
+WHERE salaryRowOrder BETWEEN totalCnt/2 AND totalCnt/2 + 1 ;
+
