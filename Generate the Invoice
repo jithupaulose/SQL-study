@@ -1,0 +1,52 @@
+https://leetcode.com/problems/generate-the-invoice/
+
+# Write your MySQL query statement below
+/**
+CONTEXT:
+TWO TABLES: Products & Purchases
+
+product_id is the primary key for Products table.
+Products table shows the ID of a product and the price of one unit.
+
+(invoice_id, product_id) is the primary key for Purchases table.
+Purchases table shows the quantity ordered from one product in an invoice.
+
+
+PROBLEM:
+SQL query to show the details of the invoice with the highest price.
+If two or more invoices have the same price, return the details of the one with the smallest invoice_id.
+
+PSEDO CODE:
+1. WITH CTE statement
+2. JOIN Both Tables on product_id and find the highest price invoice. LIMIT 1 and ORDER BY 
+3. JOIN CTE tables with both tables and find the required fields
+
+
+*/
+
+WITH CTE AS
+(
+    SELECT
+    
+        P1.invoice_id,
+        SUM(P2.price * P1.quantity) AS price
+    
+    FROM Purchases P1
+    JOIN Products  P2
+        ON P1.product_id = P2.product_id
+    GROUP BY P1.invoice_id
+    ORDER BY 2 DESC,1 ASC
+    LIMIT 1
+)
+SELECT
+
+    P.product_id,
+    SUM(P.quantity) AS quantity,
+    SUM(quantity*Pr.price) AS price
+
+FROM Purchases P
+JOIN CTE C
+    ON P.invoice_id = C.invoice_id
+JOIN Products Pr
+    ON Pr.product_id = P.product_id
+GROUP BY 1
