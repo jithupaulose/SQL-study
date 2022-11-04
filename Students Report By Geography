@@ -1,0 +1,35 @@
+https://leetcode.com/problems/students-report-by-geography/
+
+/**
+CONTEXT:
+One Table: Student
+Student table indicates the name of a student and the continent they came from.
+A school has students from Asia, Europe, and America
+
+PROBLEM:
+SQL query to pivot the continent column in the Student table so that each name is sorted alphabetically and displayed underneath its corresponding continent
+
+PSUEDO CODE:
+1. PIVOT Table. Change the rows to columns. 
+2. USE CTE statement
+3. ROW_NUMBER() OVER(partiton by continent order by name) rn
+4. GROUP BY rn.
+5. CASE/IF statement - make the columns
+6. Agg a aggragte funct - Min/Max
+
+*/
+
+WITH CTE AS
+(
+    SELECT
+        name,
+        continent,
+        ROW_NUMBER() OVER(PARTITION BY continent ORDER BY name) as rn
+    FROM Student
+)
+SELECT
+Min(IF(continent = 'America',name,null)) AS 'America',
+Min(IF(continent = 'Asia',name,null)) AS 'Asia',
+Min(IF(continent = 'Europe',name,null)) AS 'Europe'
+FROM CTE
+GROUP BY rn;
