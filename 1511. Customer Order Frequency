@@ -1,0 +1,15 @@
+https://leetcode.com/problems/customer-order-frequency/description/
+
+SELECT
+    C.customer_id,
+    C.name
+FROM Customers C
+LEFT JOIN Orders O 
+    ON C.customer_id = O.customer_id
+LEFT JOIN Product P
+    ON O.product_id = P.product_id
+WHERE order_date LIKE '2020-06%' 
+   OR order_date LIKE '2020-07%'
+GROUP BY 1,2
+HAVING SUM(IF(order_date LIKE '2020-06%',quantity * price,0)) >= 100
+AND SUM(IF(order_date LIKE '2020-07%', quantity * price,0)) >= 100;
