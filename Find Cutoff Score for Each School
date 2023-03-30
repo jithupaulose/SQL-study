@@ -1,0 +1,21 @@
+https://leetcode.com/problems/find-cutoff-score-for-each-school/description/
+
+
+# Write your MySQL query statement below
+
+# Can use either IFNULL/ COALESCE
+
+# IFNULL(MIN(score),-1) / COALESCE(MIN(score), -1)
+
+
+WITH CTE AS
+(
+    SELECT 
+    S.school_id,
+    IFNULL(MIN(score),-1) AS score
+    FROM Schools S
+    LEFT JOIN Exam E
+    ON E.student_count <= S.capacity
+    GROUP BY 1
+)
+SELECT * FROM CTE
