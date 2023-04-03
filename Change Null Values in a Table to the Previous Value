@@ -1,0 +1,47 @@
+https://leetcode.com/problems/change-null-values-in-a-table-to-the-previous-value/description/
+
+# Write your MySQL query statement below
+
+/**
+SOLUTION 1::
+
+WITH CTE_rowNumber AS
+(
+    SELECT 
+        id,
+        drink,
+        ROW_NUMBER() OVER() as row_nb
+    FROM CoffeeShop
+),
+ CTE_rowGroup AS
+ (
+    SELECT 
+        id,
+        drink,
+        COUNT(drink) OVER(ORDER BY row_nb) AS grup
+    FROM CTE_rowNumber
+ )
+ SELECT id,
+FIRST_VALUE(drink) OVER(PARTITION BY grup) AS drink
+ FROM CTE_rowGroup
+
+*/
+WITH CTE_rowNumber AS
+(
+    SELECT 
+        id,
+        drink,
+        ROW_NUMBER() OVER() as row_nb
+    FROM CoffeeShop
+)
+SELECT
+    C1.id,
+    IFNULL(C1.drink,C2.drink) AS drink
+FROM CTE_rowNumber C1
+LEFT JOIN CTE_rowNumber C2
+ON C1.row_nb > C2.row_nb 
+AND C1.drink IS NULL 
+AND C2.drink IS NOT NULL
+GROUP BY 1
+
+
