@@ -22,3 +22,21 @@ ROUND((SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END)
 FROM Delivery
 WHERE (customer_id,order_date) IN 
     (SELECT customer_id, MIN(order_date) FROM Delivery GROUP BY 1)
+
+
+SOLUTION 2:
+
+
+WITH CTE AS
+(
+    SELECT
+    delivery_id,
+    customer_id,
+    CASE WHEN order_date = customer_pref_delivery_date THEN "immediate" ELSE
+    "scheduled" END AS OrderType,
+    DENSE_RANK() OVER(PARTITION BY customer_id ORDER BY order_date ASC) AS rnk
+    FROM Delivery 
+)
+SELECT 
+ROUND(SUM(IF(OrderType = 'immediate',1,0))*100/COUNT(customer_id),2) AS immediate_percentage
+FROM CTE WHERE rnk = 1
