@@ -30,3 +30,35 @@ LEFT JOIN sentTrans ST
     ON U.user_id = ST.user_id
 LEFT JOIN recievedTran RT
     ON U.user_id = RT.user_id
+
+
+SOLUTION 2:
+
+
+WITH CTE_JOIN AS
+(
+    SELECT paid_by AS user_id, -amount AS amount FROM Transactions
+    UNION ALL
+    SELECT paid_to AS user_id, amount FROM Transactions   
+),
+CTE_Group_Amount AS
+(
+        SELECT user_id,
+            SUM(amount) AS total_amount
+        FROM CTE_JOIN
+        GROUP BY 1
+    UNION
+        SELECT user_id, 
+        0 AS total_amount
+        FROM Users
+        WHERE user_id NOT IN (SELECT user_id FROM CTE_JOIN)
+)
+SELECT
+U.user_id,
+U.user_name,
+SUM(CTE.total_amount + credit) AS credit,
+CASE WHEN SUM(total_amount + credit) < 0 THEN "Yes" ELSE "No" END AS credit_limit_breached
+FROM Users U
+JOIN CTE_Group_Amount CTE
+ON U.user_id = CTE.user_id
+GROUP BY 1
