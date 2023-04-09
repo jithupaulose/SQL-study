@@ -36,3 +36,25 @@ FROM CTE
 WHERE DATEDIFF('2019-06-30',activity_date) <=90 AND rnk = 1
 GROUP BY 1
 HAVING COUNT(user_id) >0
+
+
+
+
+SOLUTION 2:
+
+WITH CTE AS
+(
+    SELECT
+        user_id,
+        activity_date,
+        DENSE_RANK() OVER(PARTITION BY user_id ORDER BY activity_date) AS rnk
+    FROM Traffic
+    WHERE activity = "login"
+    
+)
+SELECT 
+activity_date login_date,
+count(DISTINCT user_id) AS user_count
+FROM CTE
+WHERE DATE_SUB('2019-06-30', INTERVAL 90 DAY) <= activity_date AND rnk = 1
+GROUP BY activity_date
