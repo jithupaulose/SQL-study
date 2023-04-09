@@ -37,6 +37,36 @@ JOIN totalTransactions  T2
 ON T1.account_id = T2.account_id AND PERIOD_DIFF(T2.month, T1.month)=1
 
 
+SOLUTION 2
 
-
-
+WITH CTE_Sum AS
+(
+    SELECT
+    account_id,
+    month(day) as month,
+    SUM(IF(type ='Creditor',amount,0)) AS totalAmount
+    FROM Transactions 
+    GROUP BY 1,2
+    ORDER BY 1,2
+),
+CTE_Filter AS
+(
+SELECT 
+    C.account_id,
+    month,
+    totalAmount
+FROM CTE_Sum C
+JOIN Accounts A
+ON C.account_id = A.account_id
+WHERE  totalAmount > max_income
+),
+CTE_nextMonth AS
+(
+SELECT 
+    account_id,
+    month,
+    Lead(month,1) OVER(PARTITION BY account_id ORDER BY month) AS nextMonth
+    FROM CTE_Filter
+)
+select distinct account_id from CTE_nextMonth where 
+nextMonth - month = 1
