@@ -1,0 +1,37 @@
+https://leetcode.com/problems/monthly-transactions-ii/description/
+
+# Write your MySQL query statement below
+
+/**
+
+ each month and country: GROUP BY country, DATE_FORMAT(trans_date, '%Y-%m)
+ number of approved transactions : SUM(IF(state ='approved',1,0))
+ total amount = SUM(IF(state ='approved',amount,0))
+ number of chargebacks = SUM(IF(state ='declined',1,0))
+ and their total amount = SUM(IF(state ='declined',amount,0))
+
+
+ */
+
+ WITH CTE AS
+ (
+    SELECT
+        T.id, T.country,
+        'Chargebacks' AS state, T.amount, C.trans_date
+    FROM Chargebacks C
+    LEFT JOIN Transactions T
+    ON C.trans_id = T.id
+    UNION 
+    SELECT * FROM Transactions WHERE state = 'approved'
+ )
+ SELECT 
+ DATE_FORMAT(T.trans_date, '%Y-%m') AS month,
+ country,
+SUM(CASE WHEN state = "approved" THEN 1 ELSE 0 END) AS approved_count,
+SUM(CASE WHEN state = "approved"  THEN amount ELSE 0 END) AS approved_amount,
+SUM(CASE WHEN state = "Chargebacks" THEN 1 ELSE 0 END) AS chargeback_count,
+SUM(CASE WHEN state = "Chargebacks"  THEN amount ELSE 0 END) AS chargeback_amount
+ FROM CTE T
+ LEFT JOIN Chargebacks C
+ ON T.id = C.trans_id
+ GROUP BY 1,2
