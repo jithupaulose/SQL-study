@@ -28,3 +28,19 @@ ON B.book_id = O.book_id
 WHERE available_from < DATE_SUB('2019-06-23', INTERVAL 1 MONTH)
 GROUP BY 1
 HAVING SUM(CASE WHEN dispatch_date > DATE_SUB('2019-06-23', INTERVAL 1 YEAR) THEN quantity ELSE 0 END) < 10 ;
+
+
+SOLUTION 2:
+
+SELECT  
+    B.book_id,
+    B.name
+FROM Books B
+LEFT JOIN Orders O
+ON B.book_id = O.book_id
+WHERE available_from <  DATE_SUB('2019-06-23', INTERVAL 1 MONTH)
+GROUP BY 1
+HAVING SUM(IF(dispatch_date > DATE_SUB('2019-06-23', INTERVAL 1 YEAR),quantity,0)) < 10 ;
+
+
+
