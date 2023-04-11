@@ -1,0 +1,29 @@
+https://leetcode.com/problems/get-highest-answer-rate-question/description/
+
+
+# Write your MySQL query statement below
+/**
+answer rate for a question = 
+number of times a user answered the question/number of times a user showed the question
+
+SUM(IF(action='answer',1,0))/SUM(IF(action='show',1,0))
+GROUP BY question_id
+
+*/
+
+WITH CTE AS
+(
+    SELECT
+    question_id,
+    SUM(IF(action='answer',1,0))/SUM(IF(action='show',1,0)) AS Answer_rate
+    FROM SurveyLog
+    GROUP BY 1
+),
+CTE_rank AS
+(
+    SELECT
+    question_id,
+    DENSE_RANK() OVER(ORDER BY Answer_rate DESC,question_id ASC) AS rnk
+    FROM CTE
+)
+SELECT question_id AS survey_log FROM CTE_rank WHERE rnk = 1
