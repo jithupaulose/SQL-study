@@ -33,3 +33,21 @@ HAVING E.needed_hours >
 SUM(
 CEIL(IFNULL(TIMESTAMPDIFF(second, in_time, out_time),0)/60)
 /60);
+
+
+
+SOLUTION 2:
+
+
+WITH CTE AS
+(
+    SELECT
+        E.employee_id,
+        needed_hours,
+        IFNULL(SUM(CEIL(TIMESTAMPDIFF(SECOND,in_time,out_time)/60)),0) AS total_time
+    FROM Employees E
+    LEFT JOIN Logs L
+    ON E.employee_id = L.employee_id
+    GROUP BY 1
+)
+SELECT employee_id FROM CTE WHERE needed_hours * 60 > total_time
