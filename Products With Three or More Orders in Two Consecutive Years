@@ -1,0 +1,36 @@
+https://leetcode.com/problems/products-with-three-or-more-orders-in-two-consecutive-years/description/
+
+
+
+# Write your MySQL query statement below
+/**
+WITH CTE AS
+(
+    SELECT
+        product_id,
+        YEAR(purchase_date) AS year
+    FROM Orders
+    GROUP BY 1,2
+    HAVING COUNT(order_id) >=3
+)
+SELECT 
+DISTINCT C1.product_id 
+FROM CTE C1
+JOIN CTE C2
+ON C1.product_id = C2.product_id AND C1.year = c2.year - 1
+
+*/
+
+WITH CTE AS
+(
+    SELECT
+        product_id,
+        YEAR(purchase_date) AS year,
+        LEAD(YEAR(purchase_date)) OVER(PARTITION BY product_id ORDER BY YEAR(purchase_date)) AS Next_year
+    FROM Orders
+    GROUP BY 1,2
+    HAVING COUNT(order_id) >= 3
+)
+SELECT DISTINCT product_id
+FROM CTE
+WHERE year + 1 = Next_year 
