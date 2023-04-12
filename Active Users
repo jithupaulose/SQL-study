@@ -1,0 +1,20 @@
+https://leetcode.com/problems/active-users/description/
+
+
+WITH CTE AS 
+(
+    SELECT
+        L1.id,
+        L1.login_date
+    FROM Logins L1
+    JOIN Logins L2
+        ON L1.id = L2.id AND DATEDIFF(L2.login_date,L1.login_date) BETWEEN 0 AND 4
+    GROUP BY 1,2
+    HAVING COUNT(DISTINCT L2.login_date) >=5
+)
+
+SELECT DISTINCT a.id, a.name
+FROM Accounts a
+JOIN CTE
+  ON a.id = CTE.id
+ORDER BY 1;
