@@ -25,3 +25,19 @@ F1.follower, COUNT(DISTINCT F2.follower) AS num
 FROM Follow F1
 JOIN Follow F2 ON F1.follower = F2.followee
 GROUP BY 1
+
+
+SOLUTION 2:
+
+WITH CTE AS
+(
+
+    SELECT
+    followee as follower,
+    count(*) as num
+    FROM Follow
+    GROUP BY 1
+) 
+SELECT * FROM CTE
+WHERE follower IN (SELECT follower FROM Follow)
+ORDER BY 1
