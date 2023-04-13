@@ -1,0 +1,19 @@
+https://leetcode.com/problems/compute-the-rank-as-a-percentage/description/
+
+
+WITH CTE AS
+(
+    SELECT
+    student_id,
+    department_id,
+    RANK() OVER(PARTITION BY department_id ORDER BY mark DESC) -1  AS rnk,
+    COUNT(department_id) OVER(PARTITION BY department_id) -1 AS cnt
+    FROM Students
+)
+
+SELECT 
+student_id,
+department_id,
+round(IFNULL(rnk*100/cnt,0),2) as percentage
+FROM CTE
+GROUP BY student_id,department_id
