@@ -1,0 +1,42 @@
+https://leetcode.com/problems/hopper-company-queries-iii/description/
+
+WITH RECURSIVE CTE_Month AS
+(
+    SELECT 1 AS month
+    UNION ALL
+    SELECT
+    month + 1 AS month
+    FROM CTE_Month WHERE month < 12
+),
+CTE_month_rides AS
+(
+    SELECT
+        MONTH(requested_at) AS month,
+        SUM(ride_distance) AS ride_distance,
+        SUM(ride_duration) AS ride_duration
+    FROM Rides R
+    JOIN AcceptedRides A
+    ON R.ride_id = A.ride_id
+    WHERE year(requested_at) = 2020
+    GROUP BY 1
+),
+CTE_each_month_rides AS
+(
+    SELECT
+        CM.month,
+        IFNULL(ride_distance,0.00) AS ride_distance,
+        IFNULL(ride_duration,0.00) AS ride_duration
+    FROM CTE_Month CM
+    LEFT JOIN CTE_month_rides CMR
+    ON CM.month = CMR.month
+)
+
+SELECT 
+C1.month,
+ROUND((C1.ride_distance + C2.ride_distance + C3.ride_distance)/3,2) AS average_ride_distance,
+ROUND((C1.ride_duration + C2.ride_duration + C3.ride_duration)/3,2) AS average_ride_duration
+FROM CTE_each_month_rides C1
+JOIN CTE_each_month_rides C2 ON C1.month + 1 = C2.month
+JOIN CTE_each_month_rides C3 ON C1.month + 2 = C3.month
+WHERE C1.month <= 10  
+GROUP BY 1
