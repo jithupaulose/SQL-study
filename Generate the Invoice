@@ -50,3 +50,28 @@ JOIN CTE C
 JOIN Products Pr
     ON Pr.product_id = P.product_id
 GROUP BY 1
+
+
+-------------SOLUTION 2---------
+
+
+WITH CTE AS
+(
+    SELECT
+        P1.invoice_id, 
+        SUM(quantity*price) AS price1
+    FROM Purchases P1
+    LEFT JOIN Products P2
+    ON P1.product_id = P2.product_id
+    GROUP BY 1
+    ORDER BY price1 DESC, invoice_id ASC
+    LIMIT 1
+)
+SELECT 
+    P2.product_id,
+    P2.quantity,
+    (P2.quantity * P1.price) AS price
+FROM Products P1
+LEFT JOIN Purchases P2 
+ON P1.product_id = P2.product_id
+WHERE invoice_id IN (SELECT invoice_id FROM CTE)
