@@ -33,3 +33,18 @@ Min(IF(continent = 'Asia',name,null)) AS 'Asia',
 Min(IF(continent = 'Europe',name,null)) AS 'Europe'
 FROM CTE
 GROUP BY rn;
+
+
+SOLUTIIN 2:
+
+WITH CTE AS
+(
+    SELECT
+    IF(continent= 'America',name,null) AS America,
+    IF(continent= 'Asia',name,null) AS Asia,
+    IF(continent= 'Europe',name,null) AS Europe,
+    ROW_NUMBER() OVER(PARTITION BY continent ORDER BY name) as rw
+    FROM Student
+
+)
+SELECT Max(America) America, Max(Asia) Asia, Max(Europe) Europe FROM CTE GROUP BY rw
