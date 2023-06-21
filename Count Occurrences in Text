@@ -1,0 +1,12 @@
+https://leetcode.com/problems/count-occurrences-in-text/description/
+
+SELECT
+    'bull' AS word,
+    SUM(CASE WHEN content LIKE '% bull %' THEN 1 ELSE 0 END) AS count
+FROM Files
+
+UNION 
+SELECT
+    'bear' AS word,
+    SUM(CASE WHEN content LIKE '% bear %' THEN 1 ELSE 0 END) AS count
+FROM Files
