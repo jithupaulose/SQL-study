@@ -1,0 +1,51 @@
+# Write your MySQL query statement below
+
+/**
+TWO TABLES: Trips AND Users
+
+
+Find the canellation Rate: 
+no of cancelled by client or driver requests by unbanned users/total no of requests by unbanned users. IN a day
+
+ROUND(,2)
+between "2013-10-01" and "2013-10-03"
+
+
+To SOLVE:
+
+1. Join the Trips table with the Users table based on client_id and driver_id, ensuring that neither the client nor the driver is banned.
+
+2. Filter the joined table for the specified dates.
+
+3. Group by the request_at date.
+
+4. Calculate the cancellation rate by dividing the number of canceled trips by the total number of trips for each date.
+
+*/
+
+WITH filtered_Trips AS
+(
+    SELECT
+        request_at,
+        status
+    FROM Trips T
+    JOIN Users C 
+        ON T.client_id = C.users_id AND C.banned = 'No'
+    JOIN Users D 
+        ON T.driver_id = D.users_id AND D.banned = 'No'
+    WHERE request_at BETWEEN "2013-10-01" AND "2013-10-03"
+),
+CancellationCounts AS
+(
+    SELECT
+        request_at,
+        COUNT(*) AS total_request,
+        SUM(CASE WHEN status IN ('cancelled_by_driver' , 'cancelled_by_client')
+        THEN 1 ELSE 0 END) AS dri_clnt_Cancel_request
+    FROM filtered_Trips
+    GROUP BY 1
+)
+SELECT 
+    request_at AS Day,
+    ROUND(dri_clnt_Cancel_request/total_request,2) AS 'Cancellation Rate'
+FROM CancellationCounts
