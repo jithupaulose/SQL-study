@@ -1,0 +1,37 @@
+https://leetcode.com/problems/human-traffic-of-stadium/description/
+
+# Write your MySQL query statement below
+
+/**
+ display the records with three or more rows with consecutive id which have no of people greater or equal to 100 for each
+
+
+
+Steps:
+1. CTE statement, find the concecutive 2 previous, next people count.
+2. WHERE condition   
+
+*/
+
+WITH ConsecutiveAttendance AS
+(
+  SELECT
+    id,
+    visit_date,
+    people,
+    LAG(people,1) OVER(ORDER BY id) AS prev_people1,
+    LAG(people,2) OVER(ORDER BY id) AS prev_people2,
+    LEAD(people,1) OVER(ORDER BY id) AS next_people1,
+    LEAD(people,2) OVER(ORDER BY id) AS next_people2
+  FROM Stadium
+)
+SELECT
+    id,
+    visit_date,
+    people
+FROM ConsecutiveAttendance
+WHERE people >= 100
+  AND ((next_people1 >= 100 AND next_people2 >= 100) OR
+      (prev_people1 >= 100 AND next_people1 >= 100) OR
+      (prev_people1 >= 100 AND prev_people2 >= 100))
+  ORDER BY 1
